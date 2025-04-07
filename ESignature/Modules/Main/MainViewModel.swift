@@ -260,9 +260,9 @@ final class MainViewModel: NSObject, ObservableObject {
     }
     
     func checkTrialSubscription() -> Bool {
-//#if DEBUG
-//        return true
-//#else
+#if DEBUG
+        return true
+#else
     if !PurchaseManager.shared.isPremium {
             if keychainManager.hasUsedFreeAccess == true {
                 return false
@@ -274,6 +274,6 @@ final class MainViewModel: NSObject, ObservableObject {
         } else {
             return true
         }
-//#endif
+#endif
     }
 }

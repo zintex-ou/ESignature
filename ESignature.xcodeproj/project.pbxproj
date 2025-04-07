@@ -6,13 +6,43 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AED5C6022DA2D53C00DBE969 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6012DA2D53C00DBE969 /* Lottie */; };
+		AED5C6052DA2D58000DBE969 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6042DA2D57F00DBE969 /* KeychainAccess */; };
+		AED5C6082DA2D58900DBE969 /* Alderis in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6072DA2D58900DBE969 /* Alderis */; };
+		AED5C60B2DA2D59400DBE969 /* ManySheets in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C60A2DA2D59400DBE969 /* ManySheets */; };
+		AED5C60E2DA2D59F00DBE969 /* BackgroundRemoval in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C60D2DA2D59F00DBE969 /* BackgroundRemoval */; };
+		AED5C6112DA2D5AE00DBE969 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6102DA2D5AE00DBE969 /* RswiftLibrary */; };
+		AED5C6192DA2D6BA00DBE969 /* Adapty in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6182DA2D6BA00DBE969 /* Adapty */; };
+		AED5C61C2DA2D6F300DBE969 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C61B2DA2D6F300DBE969 /* FirebaseAnalytics */; };
+		AED5C61E2DA2D6F300DBE969 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C61D2DA2D6F300DBE969 /* FirebaseAnalyticsOnDeviceConversion */; };
+		AED5C6202DA2D6F300DBE969 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C61F2DA2D6F300DBE969 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		AED5C6222DA2D6F300DBE969 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6212DA2D6F300DBE969 /* FirebaseCrashlytics */; };
+		AED5C6242DA2D6F300DBE969 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6232DA2D6F300DBE969 /* FirebaseRemoteConfig */; };
+		AED5C6272DA2D70C00DBE969 /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6262DA2D70C00DBE969 /* PrintingKit */; };
+		AED5C6542DA3A92400DBE969 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6532DA3A92400DBE969 /* Reachability */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		AEAD51CA2D8D3E2A00BC2071 /* ESignature.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ESignature.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AED5C95F2DA3F58A00DBE969 /* Exceptions for "ESignature" folder in "ESignature" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AEAD51C92D8D3E2A00BC2071 /* ESignature */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AEAD51CC2D8D3E2A00BC2071 /* ESignature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AED5C95F2DA3F58A00DBE969 /* Exceptions for "ESignature" folder in "ESignature" target */,
+			);
 			path = ESignature;
 			sourceTree = "<group>";
 		};
@@ -23,6 +53,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AED5C6082DA2D58900DBE969 /* Alderis in Frameworks */,
+				AED5C6542DA3A92400DBE969 /* Reachability in Frameworks */,
+				AED5C6202DA2D6F300DBE969 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				AED5C6052DA2D58000DBE969 /* KeychainAccess in Frameworks */,
+				AED5C6242DA2D6F300DBE969 /* FirebaseRemoteConfig in Frameworks */,
+				AED5C61C2DA2D6F300DBE969 /* FirebaseAnalytics in Frameworks */,
+				AED5C6272DA2D70C00DBE969 /* PrintingKit in Frameworks */,
+				AED5C6022DA2D53C00DBE969 /* Lottie in Frameworks */,
+				AED5C6222DA2D6F300DBE969 /* FirebaseCrashlytics in Frameworks */,
+				AED5C61E2DA2D6F300DBE969 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				AED5C60E2DA2D59F00DBE969 /* BackgroundRemoval in Frameworks */,
+				AED5C60B2DA2D59400DBE969 /* ManySheets in Frameworks */,
+				AED5C6192DA2D6BA00DBE969 /* Adapty in Frameworks */,
+				AED5C6112DA2D5AE00DBE969 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,16 +99,32 @@
 				AEAD51C62D8D3E2A00BC2071 /* Sources */,
 				AEAD51C72D8D3E2A00BC2071 /* Frameworks */,
 				AEAD51C82D8D3E2A00BC2071 /* Resources */,
+				AED5C6152DA2D5D400DBE969 /* Crashlytics */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AED5C6132DA2D5C600DBE969 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				AEAD51CC2D8D3E2A00BC2071 /* ESignature */,
 			);
 			name = ESignature;
 			packageProductDependencies = (
+				AED5C6012DA2D53C00DBE969 /* Lottie */,
+				AED5C6042DA2D57F00DBE969 /* KeychainAccess */,
+				AED5C6072DA2D58900DBE969 /* Alderis */,
+				AED5C60A2DA2D59400DBE969 /* ManySheets */,
+				AED5C60D2DA2D59F00DBE969 /* BackgroundRemoval */,
+				AED5C6102DA2D5AE00DBE969 /* RswiftLibrary */,
+				AED5C6182DA2D6BA00DBE969 /* Adapty */,
+				AED5C61B2DA2D6F300DBE969 /* FirebaseAnalytics */,
+				AED5C61D2DA2D6F300DBE969 /* FirebaseAnalyticsOnDeviceConversion */,
+				AED5C61F2DA2D6F300DBE969 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				AED5C6212DA2D6F300DBE969 /* FirebaseCrashlytics */,
+				AED5C6232DA2D6F300DBE969 /* FirebaseRemoteConfig */,
+				AED5C6262DA2D70C00DBE969 /* PrintingKit */,
+				AED5C6532DA3A92400DBE969 /* Reachability */,
 			);
 			productName = ESignature;
 			productReference = AEAD51CA2D8D3E2A00BC2071 /* ESignature.app */;
@@ -94,6 +154,18 @@
 			);
 			mainGroup = AEAD51C12D8D3E2A00BC2071;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AED5C6002DA2D53C00DBE969 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				AED5C6032DA2D57F00DBE969 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				AED5C6062DA2D58900DBE969 /* XCRemoteSwiftPackageReference "Alderis" */,
+				AED5C6092DA2D59400DBE969 /* XCRemoteSwiftPackageReference "ManySheets" */,
+				AED5C60C2DA2D59F00DBE969 /* XCRemoteSwiftPackageReference "BackgroundRemoval" */,
+				AED5C60F2DA2D5AE00DBE969 /* XCRemoteSwiftPackageReference "R" */,
+				AED5C6172DA2D6BA00DBE969 /* XCRemoteSwiftPackageReference "AdaptySDK-iOS" */,
+				AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AED5C6252DA2D70C00DBE969 /* XCRemoteSwiftPackageReference "PrintingKit" */,
+				AED5C6522DA3A92400DBE969 /* XCRemoteSwiftPackageReference "Reachability" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AEAD51CB2D8D3E2A00BC2071 /* Products */;
 			projectDirPath = "";
@@ -114,6 +186,32 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		AED5C6152DA2D5D400DBE969 /* Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = Crashlytics;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AEAD51C62D8D3E2A00BC2071 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -123,6 +221,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AED5C6132DA2D5C600DBE969 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = AED5C6122DA2D5C600DBE969 /* RswiftGenerateInternalResources */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AEAD51D62D8D3E2B00BC2071 /* Debug */ = {
@@ -249,23 +354,31 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ESignature/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ESignature/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = eSignuture;
+				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your documents";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = esigningf.ESignature;
+				PRODUCT_BUNDLE_IDENTIFIER = pdfsignature.electronic.doc.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -277,23 +390,31 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ESignature/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ESignature/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = eSignuture;
+				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your documents";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = esigningf.ESignature;
+				PRODUCT_BUNDLE_IDENTIFIER = pdfsignature.electronic.doc.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -322,6 +443,167 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AED5C6002DA2D53C00DBE969 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
+		AED5C6032DA2D57F00DBE969 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		AED5C6062DA2D58900DBE969 /* XCRemoteSwiftPackageReference "Alderis" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hbang/Alderis";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.4;
+			};
+		};
+		AED5C6092DA2D59400DBE969 /* XCRemoteSwiftPackageReference "ManySheets" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/GlennBrann/ManySheets";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		AED5C60C2DA2D59F00DBE969 /* XCRemoteSwiftPackageReference "BackgroundRemoval" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ezaldeen99/BackgroundRemoval.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		AED5C60F2DA2D5AE00DBE969 /* XCRemoteSwiftPackageReference "R" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mac-cain13/R.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.8.0;
+			};
+		};
+		AED5C6172DA2D6BA00DBE969 /* XCRemoteSwiftPackageReference "AdaptySDK-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adaptyteam/AdaptySDK-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.4.2;
+			};
+		};
+		AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
+		AED5C6252DA2D70C00DBE969 /* XCRemoteSwiftPackageReference "PrintingKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/PrintingKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.0;
+			};
+		};
+		AED5C6522DA3A92400DBE969 /* XCRemoteSwiftPackageReference "Reachability" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ashleymills/Reachability.swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AED5C6012DA2D53C00DBE969 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6002DA2D53C00DBE969 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		AED5C6042DA2D57F00DBE969 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6032DA2D57F00DBE969 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+		AED5C6072DA2D58900DBE969 /* Alderis */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6062DA2D58900DBE969 /* XCRemoteSwiftPackageReference "Alderis" */;
+			productName = Alderis;
+		};
+		AED5C60A2DA2D59400DBE969 /* ManySheets */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6092DA2D59400DBE969 /* XCRemoteSwiftPackageReference "ManySheets" */;
+			productName = ManySheets;
+		};
+		AED5C60D2DA2D59F00DBE969 /* BackgroundRemoval */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C60C2DA2D59F00DBE969 /* XCRemoteSwiftPackageReference "BackgroundRemoval" */;
+			productName = BackgroundRemoval;
+		};
+		AED5C6102DA2D5AE00DBE969 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C60F2DA2D5AE00DBE969 /* XCRemoteSwiftPackageReference "R" */;
+			productName = RswiftLibrary;
+		};
+		AED5C6122DA2D5C600DBE969 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C60F2DA2D5AE00DBE969 /* XCRemoteSwiftPackageReference "R" */;
+			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		AED5C6182DA2D6BA00DBE969 /* Adapty */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6172DA2D6BA00DBE969 /* XCRemoteSwiftPackageReference "AdaptySDK-iOS" */;
+			productName = Adapty;
+		};
+		AED5C61B2DA2D6F300DBE969 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		AED5C61D2DA2D6F300DBE969 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		AED5C61F2DA2D6F300DBE969 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		AED5C6212DA2D6F300DBE969 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		AED5C6232DA2D6F300DBE969 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C61A2DA2D6F300DBE969 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+		AED5C6262DA2D70C00DBE969 /* PrintingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6252DA2D70C00DBE969 /* XCRemoteSwiftPackageReference "PrintingKit" */;
+			productName = PrintingKit;
+		};
+		AED5C6532DA3A92400DBE969 /* Reachability */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AED5C6522DA3A92400DBE969 /* XCRemoteSwiftPackageReference "Reachability" */;
+			productName = Reachability;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AEAD51C22D8D3E2A00BC2071 /* Project object */;
 }
