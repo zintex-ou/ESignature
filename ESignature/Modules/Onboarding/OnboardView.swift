@@ -46,14 +46,8 @@ struct OnboardView: View {
     ]
     
     var body: some View {
-        ZStack {
-            
-            Image(isPad ? R.image.onboardBackPad : R.image.onboardBackPhone)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
-            
+        ZStack(alignment: .top) {
+
             if currentPage == 4 {
                 navBar
             }
@@ -72,9 +66,12 @@ struct OnboardView: View {
                     
                 case 4:
                     Image(uiImage: isPad ? padImage[currentPage] : phoneImage[currentPage])
-                    
+                        .resizable()
+                        .scaledToFit()
                 default:
                     Image(uiImage: isPad ? padImage[currentPage] : phoneImage[currentPage])
+                        .resizable()
+                        .scaledToFit()
                 }
                 
                 Spacer()
@@ -104,6 +101,13 @@ struct OnboardView: View {
                 dismissButton: .default(Text("OK"), action: {
                 })
             )
+        }
+        .background { 
+            Image(isPad ? R.image.onboardBackPad : R.image.onboardBackPhone)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea(.all)
+                .scaleEffect(1.05)
         }
     }
     
@@ -160,7 +164,7 @@ struct OnboardView: View {
     
     @ViewBuilder
     private var navBar: some View {
-        VStack {
+        ZStack {
             HStack {
                 Button {
                     viewModel.onComplete()
@@ -182,11 +186,14 @@ struct OnboardView: View {
                             }
                             .frame(width: 16, height: 16)
                     }
-                   
+                    
                 }
-                
                 Spacer()
+            }
+  
                 
+            HStack {
+                Spacer()
                 Text(R.string.localizable.restore())
                     .font(.custom(R.font.outfitRegular, size: 16))
                     .foregroundColor(.white)
@@ -197,12 +204,15 @@ struct OnboardView: View {
                         }
                         
                     }
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
+
             
-            Spacer()
+            }
+
+            
+
         }
+        .padding(.horizontal, 16)
+        .padding(.top, 16)
         .zIndex(1)
     }
     

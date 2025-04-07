@@ -13,7 +13,7 @@ struct PadPaywallView: View {
                 .edgesIgnoringSafeArea(.all)
             
             PaywallView(viewModel: viewModel)
-                .frame(width: 519, height: 784)
+                .frame(width: 519, height: 768)
                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
             
         }
