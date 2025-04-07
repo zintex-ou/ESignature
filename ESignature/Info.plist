@@ -4,11 +4,11 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Onest-ExtraLight.ttf</string>
 		<string>Outfit-Bold.ttf</string>
 		<string>Outfit-Regular.ttf</string>
-		<string>Onest-Light.ttf</string>
 		<string>Outfit-SemiBold.ttf</string>
+		<string>Onest-ExtraLight.ttf</string>
+		<string>Onest-Light.ttf</string>
 	</array>
 </dict>
 </plist>
