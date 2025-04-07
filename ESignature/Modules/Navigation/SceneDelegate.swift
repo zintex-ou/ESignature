@@ -1,0 +1,88 @@
+
+import UIKit
+import FirebaseCore
+
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+    var shortCutItem: UIApplicationShortcutItem!
+    private var keychainManager = KeychainManager()
+    private let assembly = Assembly()
+    private var coordinator: Coordinator!
+        
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        FirebaseApp.configure()
+
+        let navigationController = UINavigationController()
+        self.coordinator = Coordinator(
+            assembly: assembly,
+            navigationController: navigationController,
+            window: window
+        )
+        
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        
+        coordinator.start()
+        
+        guard let shortCut = connectionOptions.shortcutItem else  { return }
+        shortCutItem = shortCut
+    }
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        keychainManager.timeLock = Date()
+    }
+
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        
+        
+        if UserDefaults.standard.bool(forKey: AppConstants.isLauchedBefore) {
+            coordinator.addShortcutActionMenu()
+            
+            if !coordinator.checkPremium() {
+                if isPad {
+                    coordinator.showPadPaywall()
+                } else {
+                    coordinator.showPaywall()
+                }
+            }
+            
+            guard let shortCutItem else { return }
+            _ = handle(shortcutItem: shortCutItem)
+        }
+        
+        if keychainManager.hasPassword ?? false {
+            if let lastLockDate = keychainManager.timeLock,
+               let gracePeriod = keychainManager.gracePeriod {
+                let timeElapsed = Date().timeIntervalSince(lastLockDate)
+                if timeElapsed < gracePeriod {
+                    return
+                }
+            }
+            coordinator.showPasswordPresent()
+        }
+        
+
+    }
+    
+    @discardableResult
+    func handle(shortcutItem: UIApplicationShortcutItem) -> Bool {
+        guard shortcutItem.type == "MailAction" else { return false }
+        
+        coordinator.openContactUs()
+        return true
+    }
+    
+    func sceneWillEnterForeground(_ scene: UIScene) {
+    }
+
+}

@@ -1,0 +1,186 @@
+// MARK: EditView
+"signature" = "Signature";
+"stamp" = "Stamp";
+"text" = "Text";
+"watermark" = "Watermark";
+"save" = "Save";
+"no stamps yet" = "No stamps yet";
+"no signatures yet" = "No signatures yet";
+"no watermarks yet" = "No watermarks yet";
+"your documents will appear here" = "Your documents will appear here";
+"your stamps will appear here" = "Your stamps will appear here";
+"your signatures will appear here" = "Your signatures will appear here";
+"your watermarks will appear here" = "Your watermarks will appear here";
+"stamps" = "Stamps";
+"signatures" = "Signatures";
+"watermarks" = "Watermarks";
+"add new" = "Add new";
+"apply" = "Apply";
+"file name" = "File name";
+"done" = "Done";
+"add your text" = "Add your text";
+
+// MARK: MainView
+"scan" = "Scan";
+"add file" = "Add file";
+"add image" = "Add Image";
+"settings" = "Settings";
+"signed document" = "signed document";
+"no signed files yet" = "No signed files yet";
+"recent" = "Recent";
+"see all" = "See all";
+"signed" = "Signed";
+"unsigned" = "Unsigned";
+"rename" = "Rename";
+"share" = "Share";
+"print" = "Print";
+"delete" = "Delete";
+
+// MARK: OnboardView
+"continue" = "Continue";
+"titleOnboard1" = "Sign documents fast";
+"titleOnboard2" = "Rate your experience";
+"titleOnboard3" = "Create your signature easily";
+"titleOnboard4" = "Stamp & watermark tools";
+"titleOnboard5" = "Unlock full access";
+"descOnboard1" = "Scan, upload, and manage all your signed files in one place.";
+"descOnboard2" = "We’d love your feedback to help us improve and deliver the best experience possible.";
+"descOnboard3" = "Sign, stamp, add text, or watermark — fully customizable.";
+"descOnboard4" = "Add approval stamps and custom watermarks to your documents in seconds.";
+"descOnboard5" = "Sign, share, add stamps & watermarks — $6.99/week with 3-day free trial.";
+"by continuing, you agree to the" = "By continuing, you agree to the";
+"restore" = "Restore";
+"start with 3 day trial then" = "Start with a 3-day trial, then";
+
+// MARK: PaywallView
+"unlock full access" = "Unlock full access";
+"sign, share, add stamps & watermarks — $6.99/week with 3-day free trial." = "Sign, share, add stamps & watermarks — $6.99/week with 3-day free trial.";
+
+// MARK: SettingsView
+"unlock E-signature" = "Unlock E-signature";
+"upgrade" = "Upgrade";
+"authentication" = "Authentication";
+"rate Our App" = "Rate Our App";
+"share App" = "Share App";
+"contact Us" = "Contact Us";
+"privacy Policy" = "Privacy Policy";
+"term Of Use" = "Term Of Use";
+
+// MARK: SettingsView
+"enable PIN Code" = "Enable PIN Code";
+"biometric auth" = "Biometric auth";
+"reset Passcode" = "Reset Passcode";
+"lock Time" = "Lock Time";
+
+// MARK: PasswordView
+"enter Password" = "Enter Password";
+"enter new Password" = "Enter New Password";
+"forgot a password" = "Forgot a password?";
+
+// MARK: AdaptyError
+"searchTabText" = "Search";
+"myTabText" = "My";
+"settingsTabText" = "Settings";
+"error" = "Error";
+"unable to compose email" = "Unable to compose email";
+"bad connection" = "Bad Connection";
+"please turn on the internet" = "Please turn on the internet to get full access to the features";
+"week" = "week";
+"with a" = "with a";
+"day trial, then" = "day trial, then";
+"start our app with a 3day trial then" = "Start our app with a 3-day trial, then";
+"3day free trial then just"  = "3-day free trial, then just";
+"no active subscription"  = "No active subscription";
+"you have no active subscriptions please check your subscription status"  = "You have no active subscriptions, please check your subscription status.";
+"with 3 day trial then" = "with a 3-day trial, then";
+"payment cancelled" = "Payment Cancelled";
+"your payment request was canceled" = "Your payment request was canceled.";
+"an unexpected error occurred" = "An unexpected error occurred.";
+"you are not allowed to perform this action" = "You are not allowed to perform this action.";
+"payment Invalid" = "Payment Invalid";
+"one of the payment details was not recognized" = "One of the payment details was not recognized.";
+"payment Not Allowed" = "Payment Not Allowed";
+"you are not authorized to make payments" = "You are not authorized to make payments.";
+"product Not Available" = "Product Not Available";
+"the item you requested is not available in the store" = "The item you requested is not available in the store.";
+"stop subscription" = "Stop Subscription";
+"message us to learn the unsubscribe process." = "Message us to learn the unsubscribe process.";
+"permission denied" = "Permission Denied";
+"you havent allowed access to cloud service information" = "You haven't allowed access to Cloud service information.";
+"cloud service revoked" = "Cloud Service Revoked";
+"permission to use this cloud service has been revoked" = "Permission to use this cloud service has been revoked.";
+"privacy acknowledgement required" = "Privacy Acknowledgement Required";
+"you need to acknowledge apples privacy policy for apple music" = "You need to acknowledge Apple’s privacy policy for Apple Music.";
+"unauthorized request data" = "Unauthorized Request Data";
+"the app is attempting to use unauthorized data" = "The app is attempting to use unauthorized data.";
+"invalid offer identifier" = "Invalid Offer Identifier";
+"the offer identifier is invalid" = "The offer identifier is invalid.";
+"invalid signature" = "Invalid Signature";
+"the signature in a payment discount is not valid" = "The signature in a payment discount is not valid.";
+"missing offer params" = "Missing Offer Params";
+"some parameters are missing in a payment discount" = "Some parameters are missing in a payment discount.";
+"invalid offer price" = "Invalid Offer Price";
+"the price specified in app store connect is no longer valid" = "The price specified in App Store Connect is no longer valid.";
+"no product ids found" = "No Product IDs Found";
+"no inapp purchase product identifiers were found" = "No In-App Purchase product identifiers were found.";
+"product request failed" = "Product Request Failed";
+"unable to fetch available inapp purchase products at the moment" = "Unable to fetch available In-App Purchase products at the moment.";
+"cant make payments" = "Can't Make Payments";
+"inapp purchases are not allowed on this device" = "In-App Purchases are not allowed on this device.";
+"cant read receipt" = "Can't Read Receipt";
+"cant find a valid receipt" = "Can't find a valid receipt.";
+"product purchase failed" = "Product Purchase Failed";
+"refresh receipt failed" = "Refresh Receipt Failed";
+"not activated" = "Not Activated";
+"you need to be authenticated to perform requests" = "You need to be authenticated to perform requests.";
+"bad request" = "Bad Request";
+"the request made is not valid" = "The request made is not valid.";
+"decoding failed" = "Decoding Failed";
+"unable to understand the response received" = "Unable to understand the response received.";
+"encoding failed" = "Encoding Failed";
+"failed to encode parameters for the request" = "Failed to encode parameters for the request.";
+"analytics disabled" = "Analytics Disabled";
+"we can't handle analytics events since you've opted out." = "We can't handle analytics events since you've opted out.";
+"wrong Param" = "Wrong Param";
+"an incorrect parameter was passed." = "An incorrect parameter was passed.";
+"activate Once Error" = "Activate Once Error";
+"it is not possible to call the activate method more than once." = "It is not possible to call the activate method more than once.";
+"profile was changed" = "Profile Was Changed";
+"the user profile was changed during the operation." = "The user profile was changed during the operation.";
+"unsupported Data" = "Unsupported Data";
+"fetch Timeout Error" = "Fetch Timeout Error";
+"operation Interrupted" = "Operation Interrupted";
+"this operation was interrupted by the system" = "This operation was interrupted by the system.";
+"fetch subscription status" = "Fetch Subscription Status";
+"status error" = "Status error.";
+"weekly" = "Weekly";
+"monthly" = "Monthly";
+"yearly" = "Yearly";
+"month" = "month";
+"year" = "year";
+"days free trial" = "days free trial";
+"no email client" = "No Email Client";
+"please install a mail app or contact us at" = "Please install a mail app or contact us at";
+"cancel" = "Cancel";
+"copy email" = "Copy Email";
+"support request" = "Support Request";
+"please describe your issue here" = "Please describe your issue here.";
+
+"refund payment" = "Refund Payment";
+"please, contact us if you have an issue" = "Please, contact us if you have an issue";
+
+// MARK: Alerts text
+"something went wrong" = "Something went wrong.";
+"please try again" = "Please try again.";
+"bad connection" = "Bad Connection";
+"please turn on the internet" = "Please turn on the internet to get full access to the features";
+"unknown error" = "Unknown error";
+"payment cancelled" = "Payment Cancelled";
+"you cancelled the payment process" = "You cancelled the payment process";
+"subscribe for" = "Subscribe for";
+"week" = "week";
+"with a" = "with a";
+"day trial, then" = "day trial, then";
+"no active subscription"  = "No active subscription";
+"you have no active subscriptions please check your subscription status"  = "You have no active subscriptions, please check your subscription status.";
+"with 3 day trial then"  = "with 3 day trial, then";
