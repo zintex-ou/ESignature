@@ -5,7 +5,6 @@ import ManySheets
 
 struct EditView: View {
     @ObservedObject var viewModel: EditViewModel
-    //    @StateObject var pdfViewModel: PDFViewModel
     @State private var circleLocation: CGPoint?
     @State private var dragOffset: CGSize = .zero
     @State private var rotationAngle: Double = 0.0
@@ -29,7 +28,6 @@ struct EditView: View {
                 navBar
                 
                 GeometryReader { geometry in
-                    
                     ZStack {
                         VStack(spacing: 0) {
                             
@@ -74,6 +72,7 @@ struct EditView: View {
                 }
                 tabBar
             }
+            
             DefaultBottomSheet(
                 isOpen: $viewModel.shouldShowStampSheet,
                 style: bottomSheetStyle,
@@ -121,7 +120,6 @@ struct EditView: View {
             }
         }
         .background(Color(.cF7F7F7))
-
         .transparentFullScreenCover(isPresented: $viewModel.shouldShowTextEditor) {
             VStack {
                 TextEditView()
@@ -131,65 +129,6 @@ struct EditView: View {
             .background(Color(.c00000050))
         }
         .onAppear {
-//            viewModel.onWatermarkAdded = { image, annotationFrame in
-//                guard let pdfView = self.pdfViewRef else {
-//                    print("PDFView not available")
-//                    return
-//                }
-//                
-//                
-//                guard let document = pdfView.document, let page = document.page(at: 0) else {
-//                    print("No document or first page available")
-//                    return
-//                }
-//                 
-//                let pageBounds = page.bounds(for: .mediaBox)
-//                  
-//                let watermarkWidth = annotationFrame.width
-//                let watermarkHeight = annotationFrame.height 
-//                var centeredFrame = CGRect(
-//                    x: pageBounds.origin.x + (pageBounds.width - watermarkWidth) / 2,
-//                    y: pageBounds.origin.y + (pageBounds.height - watermarkHeight) / 2,
-//                    width: watermarkWidth,
-//                    height: watermarkHeight
-//                )
-//                
-//                if centeredFrame.minX < pageBounds.minX {
-//                    centeredFrame.origin.x = pageBounds.minX
-//                }
-//                if centeredFrame.maxX > pageBounds.maxX {
-//                    centeredFrame.origin.x = pageBounds.maxX - watermarkWidth
-//                }
-//                
-//                if centeredFrame.minY < pageBounds.minY {
-//                    centeredFrame.origin.y = pageBounds.minY
-//                }
-//                if centeredFrame.maxY > pageBounds.maxY {
-//                    centeredFrame.origin.y = pageBounds.maxY - watermarkHeight
-//                }
-//                
-//                let verticalOffset: CGFloat = -40.0
-//                centeredFrame.origin.y = min(centeredFrame.origin.y + verticalOffset, pageBounds.maxY - watermarkHeight)
-//                
-//                if !pageBounds.contains(centeredFrame) {
-//                    print("Warning: Computed watermark frame \(centeredFrame) is still outside page bounds \(pageBounds)")
-//                } else {
-//                    print("Watermark frame \(centeredFrame) is within page bounds \(pageBounds)")
-//                }
-//                 
-//                let annotation = PDFImageAnnotation(bounds: centeredFrame, forType: .stamp, withProperties: nil)
-//                annotation.image = image.fixedOrientation()
-//                annotation.rotation = -CGFloat(page.rotation)
-//                 
-//                DispatchQueue.main.async {
-//                    UIView.performWithoutAnimation {
-//                        page.addAnnotation(annotation)
-//                        pdfView.setNeedsDisplay()
-//                    }
-//                }
-//                
-//                print("Watermark annotation added at \(centeredFrame) on page with bounds \(pageBounds)")
-//            }
             viewModel.fetchStamps()
             viewModel.fetchSigns()
             viewModel.fetchWatermarks()
@@ -198,17 +137,14 @@ struct EditView: View {
                       selection: $viewModel.stampItem,
                       matching: .images,
                       photoLibrary: .shared())
-        
         .photosPicker(isPresented: $viewModel.shouldShowGallerySign,
                       selection: $viewModel.signItem,
                       matching: .images,
                       photoLibrary: .shared())
-        
         .photosPicker(isPresented: $viewModel.shouldShowGalleryWatermark,
                       selection: $viewModel.watermarkItem,
                       matching: .images,
                       photoLibrary: .shared())
-        
         .sheet(isPresented: $viewModel.shouldShowFileStamp) {
             DocumentPicker(pdfDocument: $viewModel.pdfDocument) { pdf in
                 if let image = viewModel.pdfToImage(pdf: pdf) {
@@ -216,7 +152,6 @@ struct EditView: View {
                 }
             }
         }
-        
         .sheet(isPresented: $viewModel.shouldShowFileSign) {
             DocumentPicker(pdfDocument: $viewModel.pdfDocument) { pdf in
                 if let image = viewModel.pdfToImage(pdf: pdf) {
@@ -224,7 +159,6 @@ struct EditView: View {
                 }
             }
         }
-        
         .sheet(isPresented: $viewModel.shouldShowFileWatermark) {
             DocumentPicker(pdfDocument: $viewModel.pdfDocument) { pdf in
                 if let image = viewModel.pdfToImage(pdf: pdf) {
@@ -232,65 +166,46 @@ struct EditView: View {
                 }
             }
         }
-        
         .onChange(of: viewModel.stampItem) { _ in
             viewModel.loadStampFromPhotos()
         }
-        
         .onChange(of: viewModel.signItem) { _ in
             viewModel.loadSignFromPhotos()
         }
-        
         .onChange(of: viewModel.watermarkItem) { _ in
             viewModel.loadWatermarkFromPhotos()
         }
-        
         .ignoresSafeArea(.keyboard)
-
     }
-     
-    func addStampAtPointInPDF(image: UIImage, pointInView: CGPoint, stampSize: CGSize) {
+    
+    func addStampAtPointInPDF(image: UIImage, pointInPDFView: CGPoint, stampSize: CGSize) {
         guard let pdfView = self.pdfViewRef, let page = pdfView.currentPage else {
-            print("PDF view or current page not available")
             return
         }
+         
+        let pdfPoint = pdfView.convert(pointInPDFView, to: page)
+        let pdfScale = pdfView.scaleFactor
+         
+        let pdfStampSize = CGSize(width: stampSize.width / pdfScale, height: stampSize.height / pdfScale)
         
-        guard let document = pdfView.document, let page = pdfView.currentPage else {
-            print("Document not ready")
-            return
-        }
-         
-        let orientedImage = image.fixedOrientation()
-         
-        let pdfPoint = pdfView.convert(pointInView, to: page)
-         
         let annotationRect = CGRect(
-            x: pdfPoint.x - stampSize.width / 2,
-            y: pdfPoint.y - stampSize.height / 2,
-            width: stampSize.width,
-            height: stampSize.height
+            x: pdfPoint.x - pdfStampSize.width / 2 - 25,
+            y: pdfPoint.y - pdfStampSize.height / 2,
+            width: pdfStampSize.width,
+            height: pdfStampSize.height
         )
+        
+        print("\(pdfPoint)")
+        print(" \(annotationRect)")
+        print(" \(page.bounds(for: .cropBox))")
+        
         let annotation = PDFImageAnnotation(bounds: annotationRect, forType: .stamp, withProperties: nil)
-        annotation.image = orientedImage
-         
+        annotation.image = image.fixedOrientation()
         annotation.rotation = -CGFloat(page.rotation)
-        annotation.rotation = -rotationAngle
         
-        let pageBounds = page.bounds(for: .cropBox)
-        guard pageBounds.contains(annotationRect) else {
-            print("Stamp is outside the page")
-            return
-        }
-        
-        let pageBounds2 = page.bounds(for: .mediaBox)
-        print("Page bounds: \(pageBounds2)")
-         
         page.addAnnotation(annotation)
-        currentStampAnnotation = annotation
-         
         pdfView.setNeedsDisplay()
-        
-        print("Overlay added at pdfPoint \(pdfPoint) with page rotation \(page.rotation)")
+        print("\(pdfPoint)")
     }
     
     private func angleBetween(point: CGPoint, and center: CGPoint) -> Double {
@@ -302,10 +217,9 @@ struct EditView: View {
     @ViewBuilder
     private func overlayFrame(geometry: GeometryProxy) -> some View {
         let defaultCenter = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
-        let location = circleLocation ?? defaultCenter
         let currentCenter = CGPoint(
-            x: location.x + dragOffset.width,
-            y: location.y + dragOffset.height
+            x: (circleLocation?.x ?? geometry.size.width / 2) + dragOffset.width,
+            y: (circleLocation?.y ?? geometry.size.height / 2) + dragOffset.height
         )
         
         if let image = viewModel.editImage {
@@ -331,8 +245,8 @@ struct EditView: View {
                         }
                         .onEnded { _ in
                             var newLocation = CGPoint(
-                                x: (circleLocation?.x ?? defaultCenter.x) + dragOffset.width,
-                                y: (circleLocation?.y ?? defaultCenter.y) + dragOffset.height
+                                x: (circleLocation ?? defaultCenter).x + dragOffset.width,
+                                y: (circleLocation ?? defaultCenter).y + dragOffset.height
                             )
                             
                             let circleRadius = CGFloat(viewModel.twirlCircleRadius)
@@ -381,7 +295,7 @@ struct EditView: View {
                             rotationGestureStartAngle = nil
                         }
                 )
-             
+            
             Circle()
                 .fill(Color.cDB341E)
                 .frame(width: 24, height: 24)
@@ -400,8 +314,7 @@ struct EditView: View {
                 .onTapGesture {
                     viewModel.editState = false
                 }
-               
-             
+            
             Circle()
                 .fill(Color.c0666EB)
                 .frame(width: 24, height: 24)
@@ -418,15 +331,14 @@ struct EditView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { value in
-
                             let changeInRadius = value.translation.width + value.translation.height
                             viewModel.twirlCircleRadius += Float(changeInRadius * 0.02)
                             viewModel.twirlCircleRadius = max(30, min(viewModel.twirlCircleRadius, Float(min(geometry.size.width, geometry.size.height)) / 2))
                         }
                         .onEnded { _ in
                             var newLocation = CGPoint(
-                                x: (circleLocation?.x ?? defaultCenter.x) + dragOffset.width,
-                                y: (circleLocation?.y ?? defaultCenter.y) + dragOffset.height
+                                x: (circleLocation ?? defaultCenter).x + dragOffset.width,
+                                y: (circleLocation ?? defaultCenter).y + dragOffset.height
                             )
                             
                             let circleRadius = CGFloat(viewModel.twirlCircleRadius)
@@ -451,11 +363,14 @@ struct EditView: View {
             HStack(spacing: 16) {
                 if viewModel.editState {
                     Button {
-                        if let image = viewModel.editImage, let location = circleLocation {
-                            let adjustedSize = CGFloat(viewModel.twirlCircleRadius) * 3
+        
+                        if let image = viewModel.editImage,
+                           let location = circleLocation {
+                            let point = CGPoint(x: location.x  + dragOffset.width, y: location.y + dragOffset.height)
+                            let adjustedSize = CGFloat(viewModel.twirlCircleRadius) * 2
                             addStampAtPointInPDF(
                                 image: image,
-                                pointInView: location,
+                                pointInPDFView: point,
                                 stampSize: CGSize(width: adjustedSize, height: adjustedSize)
                             )
                             viewModel.saveSigned(id: viewModel.documentID ?? "")
@@ -504,7 +419,7 @@ struct EditView: View {
     @ViewBuilder
     private var navBar: some View {
         ZStack {
-            Text("\(viewModel.pdfViewModel.currentPageIndex + 1) of \(String(describing: viewModel.pdfDocument?.pageCount ?? 0) )")
+            Text("\(viewModel.pdfViewModel.currentPageIndex + 1) of \(String(describing: viewModel.pdfDocument?.pageCount ?? 0))")
                 .font(.custom(R.font.outfitRegular, size: 14))
                 .foregroundStyle(.c7C7C7C)
             HStack(spacing: 8) {
