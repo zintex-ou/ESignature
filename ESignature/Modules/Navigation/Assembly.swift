@@ -88,4 +88,25 @@ class Assembly {
         let controller = UIHostingController(rootView: editView)
         return controller
     }
+    
+    func makeSave(
+        output: EditOutput,
+        image: UIImage?,
+        imageName: String? = nil,
+        fileURL: URL?,
+        fileName: String?,
+        isHistory: Bool,
+        documentID: String? = nil
+    ) -> UIHostingController<some View> {
+        let saveView = SaveView(viewModel: .init(
+            output: output,
+            image: image,
+            imageName: imageName,
+            fileURL: fileURL,
+            isHistory: isHistory,
+            documentID: documentID
+        ))
+        let controller = UIHostingController(rootView: saveView)
+        return controller
+    }
 }

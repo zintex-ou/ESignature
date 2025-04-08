@@ -54,7 +54,7 @@ final class SettingsViewModel: NSObject, ObservableObject {
     }
     
     func showShareApp() {
-        ShareLink(item: URL(string: AppConstants.URLs.appStoreLink)!)
+        UIApplication.shared.shareApp()
     }
     
     func openPrivacyPolicy() {

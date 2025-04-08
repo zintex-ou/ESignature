@@ -32,7 +32,6 @@ struct AllDocsView: View {
         }
     }
     
-    
     @ViewBuilder
     private var historyStack: some View {
         ZStack {

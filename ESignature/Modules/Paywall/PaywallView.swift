@@ -67,10 +67,10 @@ struct PaywallView: View {
              
                 }
                 .buttonStyle(OnboardButtonStyle())
-                .padding(.bottom, 40)
                 .pulseButtonStyle(isAnimated: !viewModel.reviewStatus())
                 
                 termsAndPrivacyStack
+                    .padding(.vertical, isPad ? 24 : 8)
             }
             .padding(.horizontal, 16)
         }
@@ -141,15 +141,24 @@ struct PaywallView: View {
                     Button {
                         viewModel.dissmis()
                     } label: {
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .foregroundColor(.white)
-                            .opacity(closeIsVisible ? 0.5 : 0)
-                            .animation(.easeInOut(duration: 5), value: closeIsVisible)
-                            .onAppear {
-                                closeIsVisible = true
-                            }
-                            .frame(width: 16, height: 16)
+                        if viewModel.reviewStatus() {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .foregroundColor(.white)
+                                .opacity(0.5)
+                                .frame(width: 16, height: 16)
+                            
+                        } else {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .foregroundColor(.white)
+                                .opacity(closeIsVisible ? 0.5 : 0)
+                                .animation(.easeInOut(duration: 5), value: closeIsVisible)
+                                .onAppear {
+                                    closeIsVisible = true
+                                }
+                                .frame(width: 16, height: 16)
+                        }
                     }
                     
                     Spacer()

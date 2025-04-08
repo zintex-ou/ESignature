@@ -91,6 +91,7 @@ struct OnboardView: View {
                 
                 if currentPage == 4 {
                     termsAndPrivacyStack
+                        .padding(.bottom, 8)
                 }
             }
         }
@@ -173,6 +174,7 @@ struct OnboardView: View {
                         Image(systemName: "xmark")
                             .resizable()
                             .foregroundColor(.white)
+                            .opacity(0.5)
                             .frame(width: 16, height: 16)
                         
                     } else {

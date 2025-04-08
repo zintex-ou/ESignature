@@ -37,17 +37,23 @@ struct EditView: View {
                                 
                                 Spacer()
                                 
-                                PDFKitRepresentedView(viewModel: viewModel.pdfViewModel, onCreatePDFView: { pdfView in
-                                    DispatchQueue.main.async {
-                                        self.pdfViewRef = pdfView
-                                    }
+                                HStack {
+                                    Spacer()
                                     
-                                })
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .aspectRatio(3/4, contentMode: .fit)
-                                .clipShape(RoundedRectangle(cornerRadius: 16))
-                                .padding(.horizontal, 16)
-                                .padding(.top, 16)
+                                    PDFKitRepresentedView(viewModel: viewModel.pdfViewModel, onCreatePDFView: { pdfView in
+                                        DispatchQueue.main.async {
+                                            self.pdfViewRef = pdfView
+                                        }
+                                        
+                                    })
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .aspectRatio(3/4, contentMode: .fit)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    .padding(.horizontal, 16)
+                                    .padding(.top, 16)
+                                    
+                                    Spacer()
+                                }
                                 
                                 Spacer()
                                 
@@ -125,63 +131,65 @@ struct EditView: View {
             .background(Color(.c00000050))
         }
         .onAppear {
-            viewModel.onWatermarkAdded = { image, annotationFrame in
-                guard let pdfView = self.pdfViewRef else {
-                    print("PDFView not available")
-                    return
-                }
-                guard let document = pdfView.document, let page = document.page(at: 0) else {
-                    print("No document or first page available")
-                    return
-                }
-                 
-                let pageBounds = page.bounds(for: .mediaBox)
-                  
-                let watermarkWidth = annotationFrame.width
-                let watermarkHeight = annotationFrame.height 
-                var centeredFrame = CGRect(
-                    x: pageBounds.origin.x + (pageBounds.width - watermarkWidth) / 2,
-                    y: pageBounds.origin.y + (pageBounds.height - watermarkHeight) / 2,
-                    width: watermarkWidth,
-                    height: watermarkHeight
-                )
-                
-                if centeredFrame.minX < pageBounds.minX {
-                    centeredFrame.origin.x = pageBounds.minX
-                }
-                if centeredFrame.maxX > pageBounds.maxX {
-                    centeredFrame.origin.x = pageBounds.maxX - watermarkWidth
-                }
-                
-                if centeredFrame.minY < pageBounds.minY {
-                    centeredFrame.origin.y = pageBounds.minY
-                }
-                if centeredFrame.maxY > pageBounds.maxY {
-                    centeredFrame.origin.y = pageBounds.maxY - watermarkHeight
-                }
-                
-                let verticalOffset: CGFloat = -40.0
-                centeredFrame.origin.y = min(centeredFrame.origin.y + verticalOffset, pageBounds.maxY - watermarkHeight)
-                
-                if !pageBounds.contains(centeredFrame) {
-                    print("Warning: Computed watermark frame \(centeredFrame) is still outside page bounds \(pageBounds)")
-                } else {
-                    print("Watermark frame \(centeredFrame) is within page bounds \(pageBounds)")
-                }
-                 
-                let annotation = PDFImageAnnotation(bounds: centeredFrame, forType: .stamp, withProperties: nil)
-                annotation.image = image.fixedOrientation()
-                annotation.rotation = -CGFloat(page.rotation)
-                 
-                DispatchQueue.main.async {
-                    UIView.performWithoutAnimation {
-                        page.addAnnotation(annotation)
-                        pdfView.setNeedsDisplay()
-                    }
-                }
-                
-                print("Watermark annotation added at \(centeredFrame) on page with bounds \(pageBounds)")
-            }
+//            viewModel.onWatermarkAdded = { image, annotationFrame in
+//                guard let pdfView = self.pdfViewRef else {
+//                    print("PDFView not available")
+//                    return
+//                }
+//                
+//                
+//                guard let document = pdfView.document, let page = document.page(at: 0) else {
+//                    print("No document or first page available")
+//                    return
+//                }
+//                 
+//                let pageBounds = page.bounds(for: .mediaBox)
+//                  
+//                let watermarkWidth = annotationFrame.width
+//                let watermarkHeight = annotationFrame.height 
+//                var centeredFrame = CGRect(
+//                    x: pageBounds.origin.x + (pageBounds.width - watermarkWidth) / 2,
+//                    y: pageBounds.origin.y + (pageBounds.height - watermarkHeight) / 2,
+//                    width: watermarkWidth,
+//                    height: watermarkHeight
+//                )
+//                
+//                if centeredFrame.minX < pageBounds.minX {
+//                    centeredFrame.origin.x = pageBounds.minX
+//                }
+//                if centeredFrame.maxX > pageBounds.maxX {
+//                    centeredFrame.origin.x = pageBounds.maxX - watermarkWidth
+//                }
+//                
+//                if centeredFrame.minY < pageBounds.minY {
+//                    centeredFrame.origin.y = pageBounds.minY
+//                }
+//                if centeredFrame.maxY > pageBounds.maxY {
+//                    centeredFrame.origin.y = pageBounds.maxY - watermarkHeight
+//                }
+//                
+//                let verticalOffset: CGFloat = -40.0
+//                centeredFrame.origin.y = min(centeredFrame.origin.y + verticalOffset, pageBounds.maxY - watermarkHeight)
+//                
+//                if !pageBounds.contains(centeredFrame) {
+//                    print("Warning: Computed watermark frame \(centeredFrame) is still outside page bounds \(pageBounds)")
+//                } else {
+//                    print("Watermark frame \(centeredFrame) is within page bounds \(pageBounds)")
+//                }
+//                 
+//                let annotation = PDFImageAnnotation(bounds: centeredFrame, forType: .stamp, withProperties: nil)
+//                annotation.image = image.fixedOrientation()
+//                annotation.rotation = -CGFloat(page.rotation)
+//                 
+//                DispatchQueue.main.async {
+//                    UIView.performWithoutAnimation {
+//                        page.addAnnotation(annotation)
+//                        pdfView.setNeedsDisplay()
+//                    }
+//                }
+//                
+//                print("Watermark annotation added at \(centeredFrame) on page with bounds \(pageBounds)")
+//            }
             viewModel.fetchStamps()
             viewModel.fetchSigns()
             viewModel.fetchWatermarks()
@@ -511,7 +519,7 @@ struct EditView: View {
                 Spacer()
                 
                 Button {
-                    viewModel.saveDocument()
+                    viewModel.showSave()
                 } label: {
                     Text(R.string.localizable.save)
                         .font(.custom(R.font.outfitSemiBold, size: 14))

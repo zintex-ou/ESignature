@@ -1,4 +1,5 @@
 import Foundation
+import PrintingKit
 import SwiftUI
 import PDFKit
 import PhotosUI
@@ -44,7 +45,7 @@ final class EditViewModel: ObservableObject {
     private var redoStack: [EditingState] = []
     @Published var shareURL: URL?
     @Published var showShareSheet: Bool = false
-        
+    
     var pdfDocument: PDFDocument?
     
     @ObservedObject var pdfViewModel: PDFViewModel
@@ -94,6 +95,18 @@ final class EditViewModel: ObservableObject {
         
         if !isHistory {
             saveObject()
+        }
+    }
+    
+    func showSave() {
+        output?.showSave(image: nil, fileURL: fileURL, fileName: fileName, isHistory: false)
+    }
+    
+    func printAction() {
+        do {
+            try Printer.shared.print(.pdfFile(at: fileURL))
+        } catch {
+            print("Can't print file: \(fileURL), error: \(error.localizedDescription)")
         }
     }
     
@@ -150,18 +163,12 @@ final class EditViewModel: ObservableObject {
     }
     
     func saveDocument() {
-        guard let pdfDoc = pdfViewModel.document, let pdfData = pdfDoc.dataRepresentation() else {
+        guard let pdfDoc = fileURL else {
             print("No pdf file")
             return
         }
         
-        let activityViewController = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
-        
-        DispatchQueue.main.async {
-            if let topVC = UIApplication.shared.windows.first?.rootViewController {
-                topVC.present(activityViewController, animated: true, completion: nil)
-            }
-        }
+        UIApplication.shared.shareFile(file: pdfDoc)
     }
     
     func saveObject() {
@@ -279,9 +286,9 @@ final class EditViewModel: ObservableObject {
         shouldShowTextEditor = true
     }
     
-//    func showTextEditView() {
-//        output?.showTextEdit(self)
-//    }
+    //    func showTextEditView() {
+    //        output?.showTextEdit(self)
+    //    }
     
     func showGalleryStamp() {
         shouldShowGalleryStamp = true

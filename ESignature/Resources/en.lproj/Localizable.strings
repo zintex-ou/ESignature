@@ -19,6 +19,7 @@
 "file name" = "File name";
 "done" = "Done";
 "add your text" = "Add your text";
+"your document is ready!" = "Your document is ready!";
 
 // MARK: MainView
 "scan" = "Scan";

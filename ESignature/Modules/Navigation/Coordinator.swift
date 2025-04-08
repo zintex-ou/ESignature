@@ -33,7 +33,7 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
                 self.startMain()
             }
         }
-   
+        
     }
     
     func startFetching() async {
@@ -55,7 +55,7 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
             output: self,
             onComplete: { [weak self] in
                 self?.startMain()
-        })
+            })
         navigationController.setViewControllers([onboardHost], animated: true)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
@@ -174,21 +174,21 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
 
 extension Coordinator: MainOutput {
     func showPaywall() {
-        //        if !checkPremium() {
-        let paywallHost = assembly.makePaywall(output: self)
-        paywallHost.modalPresentationStyle = .fullScreen
-        navigationController.present(paywallHost, animated: true)
-        //        }
+        if !checkPremium() {
+            let paywallHost = assembly.makePaywall(output: self)
+            paywallHost.modalPresentationStyle = .fullScreen
+            navigationController.present(paywallHost, animated: true)
+        }
     }
     
     func showPadPaywall() {
         let paywallHost = assembly.makePadPaywall(output: self)
         paywallHost.modalPresentationStyle = .overFullScreen
         paywallHost.view.backgroundColor = .clear
-
+        
         navigationController.present(paywallHost, animated: true)
     }
-
+    
     
     func showEdit(
         image: UIImage?,
@@ -239,6 +239,16 @@ extension Coordinator: EditOutput {
         let drawHost = assembly.makeDraw(output: self, viewModel: viewModel)
         drawHost.modalPresentationStyle = .fullScreen
         navigationController.present(drawHost, animated: true)
+    }
+    
+    func showSave(
+        image: UIImage?,
+        fileURL: URL?,
+        fileName: String?,
+        isHistory: Bool
+    ) {
+        let saveHost = assembly.makeSave(output: self, image: image, fileURL: fileURL, fileName: fileName, isHistory: isHistory)
+        navigationController.pushViewController(saveHost, animated: true)
     }
 }
 

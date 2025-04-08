@@ -22,40 +22,42 @@ struct MainView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
+                navBar
+                    .padding(.top, isPad ? 24 : 0)
+                
+                signedCountStack
+                    .padding(.top, isPad ? 78 : 61)
+
+                
+                buttonsStack
+                    .padding(.top, 54)
+                
+                            Spacer()
+            }
+            .zIndex(1)
+            
+            VStack(spacing: 0) {
                 Image(R.image.mainBack)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity, maxHeight: 406)
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, minHeight: 406, maxHeight: 406)
+                    .clipped()
                     .clipShape(RoundedBottomCorners(radius: 16))
                     .ignoresSafeArea()
-                    .overlay {
-                        VStack {
-                            navBar
-                            
-                            Spacer()
-                            
-                            signedCountStack
-                            
-                            Spacer()
-                            
-                            buttonsStack
-                                .padding(.bottom, 24)
-                            
-                            Spacer()
-                        }
-                    }
                 
                 if viewModel.documents?.count == 0 {
                     Spacer()
                     emptyViewStack
                 } else {
-                    
-                    historyStack
+                        historyStack
+//                        .padding(.top, 24)
                 }
                 
                 Spacer()
             }
+
             
             DefaultBottomSheet(
                 isOpen: $viewModel.shouldRenameSheet,
@@ -75,7 +77,7 @@ struct MainView: View {
                     transaction.animation = nil
                 }
             }
-            .zIndex(1)
+            .zIndex(3)
             
             DefaultBottomSheet(
                 isOpen: $viewModel.openAllDocs,
@@ -91,6 +93,7 @@ struct MainView: View {
                     transaction.animation = nil
                 }
             }
+            .zIndex(2)
         }
         .background(.cF7F7F7)
         
@@ -266,7 +269,7 @@ struct MainView: View {
     
     @ViewBuilder
     private var historyStack: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             VStack {
                 HStack {
                     Text(R.string.localizable.recent())
