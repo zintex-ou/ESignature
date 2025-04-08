@@ -25,9 +25,9 @@ struct SignedViewCell: View {
         HStack {
             Image(uiImage: UIImage(data: image ?? Data()) ?? UIImage())
                 .resizable()
-                .scaledToFit()
-                .frame(width: 46, height: 46)
+                .scaledToFill()
                 .clipped()
+                .frame(width: 46, height: 46)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .border(.cF7F7F7, width: 0.5)
             

@@ -40,6 +40,7 @@ struct MainView: View {
                             Spacer()
                             
                             buttonsStack
+                                .padding(.bottom, 24)
                             
                             Spacer()
                         }
@@ -69,6 +70,22 @@ struct MainView: View {
                     )
                 }
                 .frame(height: isKeyboardOpen ? 245 + keyboardHeight : 245)
+                .buttonStyle(PlainButtonStyle())
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
+            }
+            .zIndex(1)
+            
+            DefaultBottomSheet(
+                isOpen: $viewModel.openAllDocs,
+                style: bottomSheetStyle,
+                options: [.enableHandleBar, .tapAwayToDismiss, .swipeToDismiss]
+            ) {
+                VStack(alignment: .leading, spacing: 0) {
+                    AllDocsView(viewModel: viewModel)
+                }
+                .frame(height: UIScreen.main.bounds.height * 0.9)
                 .buttonStyle(PlainButtonStyle())
                 .transaction { transaction in
                     transaction.animation = nil
@@ -281,10 +298,15 @@ struct MainView: View {
             }
                 .scrollDisabled(true)
                 
-                Text(R.string.localizable.seeAll())
-                    .font(.custom(R.font.outfitSemiBold, size: 16))
-                    .padding(.vertical, 14)
-                    .foregroundStyle(.c0666EB)
+                Button {
+                    viewModel.openAllDocs = true
+                } label: {
+                    Text(R.string.localizable.seeAll())
+                        .font(.custom(R.font.outfitSemiBold, size: 16))
+                        .padding(.vertical, 14)
+                        .foregroundStyle(.c0666EB)
+                }
+              
             }
             .padding(.horizontal, 16)
         }

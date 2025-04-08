@@ -22,6 +22,8 @@ final class MainViewModel: NSObject, ObservableObject {
     @Published var shouldRenameSheet: Bool = false
     @Published var shouldAddImage: Bool = false
     
+    @Published var openAllDocs: Bool = false
+    
     @Published var documents: [DocumentEntity]?
     @Published var signedDocuments: [DocumentEntity]?
     @Published var selectedDocumentID: String?

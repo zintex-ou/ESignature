@@ -13,12 +13,15 @@ struct PaywallView: View {
     var body: some View {
         ZStack(alignment: .top) {
 
-            
-            if viewModel.isLoading {
-                CustomLoaderView()
-            }
-            
             navBar
+            
+            VStack {
+                Spacer()
+                if viewModel.isLoading {
+                    CustomLoaderView()
+                }
+                Spacer()
+            }
             
             VStack {
                 Spacer()

@@ -35,6 +35,8 @@
 "share" = "Share";
 "print" = "Print";
 "delete" = "Delete";
+"all documents" = "All documents";
+"search" = "Search";
 
 // MARK: OnboardView
 "continue" = "Continue";
