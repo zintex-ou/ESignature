@@ -111,12 +111,7 @@ struct SignedViewCell: View {
         }
         let absURL = FileManagerService.shared.getAbsoluteURL(from: path)
 
-        if let pdfData = FileManagerService.shared.getPDF(from: absURL.path) {
-            self.sharedPDFData = pdfData
-            self.isShareSheetPresented = true
-        } else {
-            print("Error reading PDF data")
-        }
+        UIApplication.shared.shareFile(file: absURL)
     }
 
 

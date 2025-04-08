@@ -38,24 +38,31 @@ struct MainView: View {
             .zIndex(1)
             
             VStack(spacing: 0) {
-                Image(R.image.mainBack)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity, minHeight: 406, maxHeight: 406)
-                    .clipped()
-                    .clipShape(RoundedBottomCorners(radius: 16))
-                    .ignoresSafeArea()
-                
-                if viewModel.documents?.count == 0 {
-                    Spacer()
-                    emptyViewStack
-                } else {
+                ScrollView {
+                    Image(R.image.mainBack)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .scaledToFill()
+                        .frame(maxWidth: .infinity, minHeight: 406, maxHeight: 406)
+                        .clipped()
+                        .clipShape(RoundedBottomCorners(radius: 16))
+                        .ignoresSafeArea()
+                    
+                    if viewModel.documents?.count == 0 {
+                        Spacer()
+                        emptyViewStack
+                        Spacer()
+                    } else {
                         historyStack
-//                        .padding(.top, 24)
+                         .padding(.top, 16)
+                        Spacer()
+                    }
+                    
+//                    Spacer()
                 }
-                
-                Spacer()
+                .ignoresSafeArea()
+                .scrollDisabled(true)
+
             }
 
             
