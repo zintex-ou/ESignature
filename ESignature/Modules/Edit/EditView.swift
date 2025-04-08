@@ -3,6 +3,37 @@ import PDFKit
 import Combine
 import ManySheets
 
+// MARK: - UIImage Extension to Rotate an Image
+extension UIImage {
+    /// Rotates the image by the given degrees.
+    func rotated(by degrees: CGFloat) -> UIImage? {
+        let radians = degrees * .pi / 180
+        // Calculate the new size after rotation
+        var newSize = CGRect(origin: .zero, size: self.size)
+            .applying(CGAffineTransform(rotationAngle: radians))
+            .integral.size
+        // Ensure newSize is valid (avoid zero size)
+        newSize.width = max(newSize.width, 1)
+        newSize.height = max(newSize.height, 1)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        // Move origin to the middle of the new image so rotation occurs around center
+        context.translateBy(x: newSize.width / 2, y: newSize.height / 2)
+        // Rotate the context
+        context.rotate(by: radians)
+        // Draw the image at its center
+        self.draw(in: CGRect(x: -self.size.width / 2,
+                             y: -self.size.height / 2,
+                             width: self.size.width,
+                             height: self.size.height))
+        // Grab the rotated image from the context
+        let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return rotatedImage
+    }
+}
+
 struct EditView: View {
     @ObservedObject var viewModel: EditViewModel
     @State private var circleLocation: CGPoint?
@@ -42,7 +73,6 @@ struct EditView: View {
                                         DispatchQueue.main.async {
                                             self.pdfViewRef = pdfView
                                         }
-                                        
                                     })
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                                     .aspectRatio(3/4, contentMode: .fit)
@@ -70,6 +100,7 @@ struct EditView: View {
                         }
                     }
                 }
+                
                 tabBar
             }
             
@@ -179,34 +210,42 @@ struct EditView: View {
     }
     
     func addStampAtPointInPDF(image: UIImage, pointInPDFView: CGPoint, stampSize: CGSize) {
-        guard let pdfView = self.pdfViewRef, let page = pdfView.currentPage else {
-            return
+            guard let pdfView = self.pdfViewRef, let page = pdfView.currentPage else {
+                return
+            }
+            
+            let pdfPoint = pdfView.convert(pointInPDFView, to: page)
+            let pdfScale = pdfView.scaleFactor
+            
+            let pdfStampSize = CGSize(width: stampSize.width / pdfScale,
+                                      height: stampSize.height / pdfScale)
+            
+            // Adjust the annotation rect as before
+            let annotationRect = CGRect(
+                x: pdfPoint.x - pdfStampSize.width / 2 - 25,
+                y: pdfPoint.y - pdfStampSize.height / 2,
+                width: pdfStampSize.width,
+                height: pdfStampSize.height
+            )
+            
+            print("PDF Point: \(pdfPoint)")
+            print("Annotation Rect: \(annotationRect)")
+            print("Page Bounds: \(page.bounds(for: .cropBox))")
+            
+            let annotation = PDFImageAnnotation(bounds: annotationRect, forType: .stamp, withProperties: nil)
+            
+            if
+               let rotatedImage =  image.fixedOrientation().rotated(by: CGFloat(rotationAngle)) {
+                annotation.image = rotatedImage
+            } else {
+                annotation.image = image.fixedOrientation()
+            }
+            
+            annotation.rotation = CGFloat(rotationAngle)
+            
+            page.addAnnotation(annotation)
+            pdfView.setNeedsDisplay()
         }
-         
-        let pdfPoint = pdfView.convert(pointInPDFView, to: page)
-        let pdfScale = pdfView.scaleFactor
-         
-        let pdfStampSize = CGSize(width: stampSize.width / pdfScale, height: stampSize.height / pdfScale)
-        
-        let annotationRect = CGRect(
-            x: pdfPoint.x - pdfStampSize.width / 2 - 25,
-            y: pdfPoint.y - pdfStampSize.height / 2,
-            width: pdfStampSize.width,
-            height: pdfStampSize.height
-        )
-        
-        print("\(pdfPoint)")
-        print(" \(annotationRect)")
-        print(" \(page.bounds(for: .cropBox))")
-        
-        let annotation = PDFImageAnnotation(bounds: annotationRect, forType: .stamp, withProperties: nil)
-        annotation.image = image.fixedOrientation()
-        annotation.rotation = -CGFloat(page.rotation)
-        
-        page.addAnnotation(annotation)
-        pdfView.setNeedsDisplay()
-        print("\(pdfPoint)")
-    }
     
     private func angleBetween(point: CGPoint, and center: CGPoint) -> Double {
         let deltaY = Double(point.y - center.y)
@@ -266,15 +305,16 @@ struct EditView: View {
             
             let absolutePos = currentCenter
             
+            // Rotation handle button
             Circle()
                 .fill(Color.c0666EB)
                 .frame(width: 24, height: 24)
-                .overlay(
+                .overlay {
                     Image(.rotationFrame)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
-                )
+                }
                 .position(
                     x: absolutePos.x + CGFloat(viewModel.twirlCircleRadius),
                     y: absolutePos.y - CGFloat(viewModel.twirlCircleRadius)
@@ -296,6 +336,7 @@ struct EditView: View {
                         }
                 )
             
+            // Delete button
             Circle()
                 .fill(Color.cDB341E)
                 .frame(width: 24, height: 24)
@@ -315,15 +356,16 @@ struct EditView: View {
                     viewModel.editState = false
                 }
             
+            // Resize handle button
             Circle()
                 .fill(Color.c0666EB)
                 .frame(width: 24, height: 24)
-                .overlay(
+                .overlay {
                     Image(.scaleFrame)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 16, height: 16)
-                )
+                }
                 .position(
                     x: absolutePos.x + CGFloat(viewModel.twirlCircleRadius),
                     y: absolutePos.y + CGFloat(viewModel.twirlCircleRadius)
@@ -363,10 +405,9 @@ struct EditView: View {
             HStack(spacing: 16) {
                 if viewModel.editState {
                     Button {
-        
                         if let image = viewModel.editImage,
                            let location = circleLocation {
-                            let point = CGPoint(x: location.x  + dragOffset.width, y: location.y + dragOffset.height)
+                            let point = CGPoint(x: location.x + dragOffset.width, y: location.y + dragOffset.height)
                             let adjustedSize = CGFloat(viewModel.twirlCircleRadius) * 2
                             addStampAtPointInPDF(
                                 image: image,
