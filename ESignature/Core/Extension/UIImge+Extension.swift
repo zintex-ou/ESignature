@@ -4,13 +4,26 @@ import PDFKit
 
 extension UIImage {
     
-    func toPDFDocument() -> PDFDocument {
-        let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: self.size))
-        let data = pdfRenderer.pdfData { context in
-            context.beginPage()
-            self.draw(in: CGRect(origin: .zero, size: self.size))
-        }
-        return PDFDocument(data: data) ?? PDFDocument()
+    func toPDFDocument() -> PDFDocument { 
+        let standardPDFSize = CGSize(width: 595, height: 842)
+        let pdfPageBounds = CGRect(origin: .zero, size: standardPDFSize)
+        let pdfData = NSMutableData()
+        
+        UIGraphicsBeginPDFContextToData(pdfData, pdfPageBounds, nil)
+        UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil)
+         
+        let imageScale = min(standardPDFSize.width / self.size.width,
+                             standardPDFSize.height / self.size.height)
+        let scaledWidth = self.size.width * imageScale
+        let scaledHeight = self.size.height * imageScale
+        let x = (standardPDFSize.width - scaledWidth) / 2.0
+        let y = (standardPDFSize.height - scaledHeight) / 2.0
+        let drawRect = CGRect(x: x, y: y, width: scaledWidth, height: scaledHeight)
+         
+        self.draw(in: drawRect)
+        UIGraphicsEndPDFContext()
+        
+        return PDFDocument(data: pdfData as Data) ?? PDFDocument()
     }
     
     func fixedOrientation() -> UIImage {
