@@ -11,12 +11,8 @@ struct PaywallView: View {
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
     
     var body: some View {
-        ZStack {
-            Image(isPad ? R.image.onboardBackPad : R.image.onboardBackPhone)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
+        ZStack(alignment: .top) {
+
             
             if viewModel.isLoading {
                 CustomLoaderView()
@@ -75,6 +71,13 @@ struct PaywallView: View {
             }
             .padding(.horizontal, 16)
         }
+        .background {
+            Image(isPad ? R.image.onboardBackPad : R.image.onboardBackPhone)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea(.all)
+                .scaleEffect(1.05)
+        }
     }
     
     @ViewBuilder
@@ -130,40 +133,47 @@ struct PaywallView: View {
     
     @ViewBuilder
     private var navBar: some View {
-        VStack {
-            HStack {
-                Button {
-                    viewModel.dissmis()
-                } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .foregroundColor(.white)
-                        .opacity(closeIsVisible ? 0.5 : 0)
-                        .animation(.easeInOut(duration: 5), value: closeIsVisible)
-                        .onAppear {
-                            closeIsVisible = true
-                        }
-                        .frame(width: 16, height: 16)
-                }
-                
-                Spacer()
-                
-                Text(R.string.localizable.restore())
-                    .font(.custom(R.font.outfitRegular, size: 16))
-                    .foregroundColor(.white)
-                    .opacity(0.5)
-                    .onTapGesture {
-                        viewModel.tapOnRestore {
-                            viewModel.dissmis()
-                        }
-                        
+            ZStack {
+                HStack {
+                    Button {
+                        viewModel.dissmis()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .foregroundColor(.white)
+                            .opacity(closeIsVisible ? 0.5 : 0)
+                            .animation(.easeInOut(duration: 5), value: closeIsVisible)
+                            .onAppear {
+                                closeIsVisible = true
+                            }
+                            .frame(width: 16, height: 16)
                     }
+                    
+                    Spacer()
+                    
+                }
+               
+                HStack {
+                    
+                    Spacer()
+                
+                    Text(R.string.localizable.restore())
+                        .font(.custom(R.font.outfitRegular, size: 16))
+                        .foregroundColor(.white)
+                        .opacity(0.5)
+                        .onTapGesture {
+                            viewModel.tapOnRestore {
+                                viewModel.dissmis()
+                            }
+                            
+                        }
+                    
+                    
+                }
             }
             .padding(.horizontal, 16)
             .padding(.top, 16)
             
-            Spacer()
-        }
         .zIndex(1)
         .alert(isPresented: $viewModel.showAlert) {
             return Alert(
