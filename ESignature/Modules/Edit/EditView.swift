@@ -85,8 +85,8 @@ struct EditView: View {
                                             .padding(.vertical, 24)
                                     } else {
                                         Color.clear
-                                              .frame(height: 68)
-                                              .padding(.vertical, 24)
+                                            .frame(height: 68)
+                                            .padding(.vertical, 24)
                                     }
                                 }
                             }
@@ -207,41 +207,85 @@ struct EditView: View {
     }
     
     func addStampAtPointInPDF(image: UIImage, pointInPDFView: CGPoint, stampSize: CGSize) {
-            guard let pdfView = self.pdfViewRef, let page = pdfView.currentPage else {
-                return
-            }
-            
-            let pdfPoint = pdfView.convert(pointInPDFView, to: page)
-            let pdfScale = pdfView.scaleFactor
-            
-            let pdfStampSize = CGSize(width: stampSize.width / pdfScale,
-                                      height: stampSize.height / pdfScale)
-            
-            let annotationRect = CGRect(
-                x: pdfPoint.x - pdfStampSize.width / 2 - 25,
-                y: pdfPoint.y - pdfStampSize.height / 2,
-                width: pdfStampSize.width,
-                height: pdfStampSize.height
-            )
-            
-            print("PDF Point: \(pdfPoint)")
-            print("Annotation Rect: \(annotationRect)")
-            print("Page Bounds: \(page.bounds(for: .cropBox))")
-            
-            let annotation = PDFImageAnnotation(bounds: annotationRect, forType: .stamp, withProperties: nil)
-            
-            if
-               let rotatedImage =  image.fixedOrientation().rotated(by: CGFloat(rotationAngle)) {
-                annotation.image = rotatedImage
-            } else {
-                annotation.image = image.fixedOrientation()
-            }
-            
-            annotation.rotation = CGFloat(rotationAngle)
-            
-            page.addAnnotation(annotation)
-            pdfView.setNeedsDisplay()
+        guard let pdfView = self.pdfViewRef, let page = pdfView.currentPage else {
+            return
         }
+        
+        let pdfPoint = pdfView.convert(pointInPDFView, to: page)
+        let pdfScale = pdfView.scaleFactor
+        
+        let pdfStampSize = CGSize(width: stampSize.width / pdfScale,
+                                  height: stampSize.height / pdfScale)
+        
+        let annotationRect = CGRect(
+            x: pdfPoint.x - pdfStampSize.width / 2 - 25,
+            y: pdfPoint.y - pdfStampSize.height / 2,
+            width: pdfStampSize.width,
+            height: pdfStampSize.height
+        )
+        
+        print("PDF Point: \(pdfPoint)")
+        print("Annotation Rect: \(annotationRect)")
+        print("Page Bounds: \(page.bounds(for: .cropBox))")
+        
+        let annotation = PDFImageAnnotation(bounds: annotationRect, forType: .stamp, withProperties: nil)
+        
+        if
+            let rotatedImage =  image.fixedOrientation().rotated(by: CGFloat(rotationAngle)) {
+            annotation.image = rotatedImage
+        } else {
+            annotation.image = image.fixedOrientation()
+        }
+        
+        annotation.rotation = CGFloat(rotationAngle)
+        
+        page.addAnnotation(annotation)
+        pdfView.setNeedsDisplay()
+    }
+    
+    func addWatermarkAtPointInPDF(image: UIImage, pointInPDFView: CGPoint, stampSize: CGSize) {
+        guard let pdfView = self.pdfViewRef, let page = pdfView.currentPage else {
+            return
+        }
+        
+        let pdfPoint = pdfView.convert(pointInPDFView, to: page)
+        let pdfScale = pdfView.scaleFactor
+        
+        let pdfStampSize = CGSize(width: stampSize.width / pdfScale,
+                                  height: stampSize.height / pdfScale)
+        
+        let annotationRect = CGRect(
+            x: pdfPoint.x - pdfStampSize.width / 2 - 25,
+            y: pdfPoint.y - pdfStampSize.height / 2,
+            width: pdfStampSize.width,
+            height: pdfStampSize.height
+        )
+        
+        print("PDF Point: \(pdfPoint)")
+        print("Annotation Rect: \(annotationRect)")
+        print("Page Bounds: \(page.bounds(for: .cropBox))")
+        
+        let annotation = PDFImageAnnotation(bounds: annotationRect, forType: .stamp, withProperties: nil)
+        
+        if
+            let rotatedImage =  image.fixedOrientation().rotated(by: CGFloat(rotationAngle)) {
+            annotation.image = rotatedImage
+        } else {
+            annotation.image = image.fixedOrientation()
+        }
+        
+        annotation.rotation = CGFloat(rotationAngle)
+        
+        for pageImagex in 0...(pdfView.document?.pageCount ?? 1) {
+            
+            var nextPage = pdfView.document?.page(at: pageImagex)
+            nextPage?.addAnnotation(annotation)
+            print("pageImagex \(pageImagex)")
+            
+        }
+        pdfView.setNeedsDisplay()
+    }
+    
     
     private func angleBetween(point: CGPoint, and center: CGPoint) -> Double {
         let deltaY = Double(point.y - center.y)
@@ -402,14 +446,22 @@ struct EditView: View {
                            let location = circleLocation {
                             let point = CGPoint(x: location.x + dragOffset.width, y: location.y + dragOffset.height)
                             let adjustedSize = CGFloat(viewModel.twirlCircleRadius) * 2
-                            addStampAtPointInPDF(
-                                image: image,
-                                pointInPDFView: point,
-                                stampSize: CGSize(width: adjustedSize, height: adjustedSize)
-                            )
-                            viewModel.saveSigned(id: viewModel.documentID ?? "")
+                            if viewModel.editedOverlayType == .watermark {
+                                addWatermarkAtPointInPDF(
+                                    image: image,
+                                    pointInPDFView: point,
+                                    stampSize:  CGSize(width: adjustedSize, height: adjustedSize)
+                                )
+                            } else {
+                                addStampAtPointInPDF(
+                                    image: image,
+                                    pointInPDFView: point,
+                                    stampSize: CGSize(width: adjustedSize, height: adjustedSize)
+                                )
+                            }
                         }
                         viewModel.editState = false
+                        viewModel.saveSigned(id: viewModel.documentID ?? "")
                         rotationAngle = 0.0
                     } label: {
                         Text(R.string.localizable.apply())
@@ -469,6 +521,8 @@ struct EditView: View {
                 
                 Button {
                     viewModel.showSave()
+                    
+                    
                 } label: {
                     Text(R.string.localizable.save)
                         .font(.custom(R.font.outfitSemiBold, size: 14))

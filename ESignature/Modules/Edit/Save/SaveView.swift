@@ -52,6 +52,10 @@ struct SaveView: View {
                                         PreviewThumbnail(viewModel: viewModel.pdfViewModel, pdfViewProxy: pdfView)
                                             .frame(height: 68)
                                             .padding(.vertical, 24)
+                                    } else {
+                                        Color.clear
+                                              .frame(height: 68)
+                                              .padding(.vertical, 24)
                                     }
                                 }
                             }

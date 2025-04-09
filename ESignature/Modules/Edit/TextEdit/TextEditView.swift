@@ -70,6 +70,7 @@ struct TextEditView: View, KeyboardReadable {
                 Button {
                     viewModel.editImage = textToImage(drawText: enteringText)
                     viewModel.editState = true
+                    viewModel.editedOverlayType = .stamp
                     viewModel.dissmis()
                 } label: {
                     Text(R.string.localizable.done)

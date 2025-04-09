@@ -93,7 +93,8 @@ struct SignSheetView: View {
                                     
                                     viewModel.selectedOverlay = sign
                                     viewModel.editImage = sign.image
-                                        viewModel.editState = true
+                                    viewModel.editedOverlayType = .signature
+                                    viewModel.editState = true
                                     
                                 }
                             } label: {

@@ -82,10 +82,8 @@ struct WatermarkSheetView: View {
                                 } else {
                                     viewModel.selectedOverlay = watermark
                                     viewModel.editImage = watermark.image
-//                                    viewModel.signCompletion { [weak self] image in
-//
-//                                    }
-                                        viewModel.editState = true
+                                    viewModel.editedOverlayType = .watermark
+                                    viewModel.editState = true
                                     
                                 }
                             } label: {

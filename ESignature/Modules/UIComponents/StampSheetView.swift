@@ -83,7 +83,8 @@ struct StampSheetView: View {
                                 } else {
                                     viewModel.selectedOverlay = stamp
                                     viewModel.editImage = stamp.image
-                                        viewModel.editState = true
+                                    viewModel.editedOverlayType = .stamp
+                                    viewModel.editState = true
                                     
                                 }
                             } label: {

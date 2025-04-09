@@ -30,6 +30,7 @@ final class EditViewModel: ObservableObject {
     @Published var fileURL: URL?
     @Published var image: UIImage?
     @Published var editState: Bool = false
+    @Published var editedOverlayType: OverlayEnum = .signature
     @Published var editImage: UIImage?
     @Published var imageName: String?
     @Published var fileName: String?
@@ -98,9 +99,13 @@ final class EditViewModel: ObservableObject {
         }
     }
     
+
+    
     func showSave() {
-        output?.showSave(image: nil, fileURL: fileURL, fileName: fileName, isHistory: false)
-    }
+            output?.showSave(image: nil, fileURL: fileURL, fileName: fileName, isHistory: false)
+        }
+    
+
     
     func printAction() {
         do {
