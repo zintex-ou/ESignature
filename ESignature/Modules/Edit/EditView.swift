@@ -5,29 +5,22 @@ import ManySheets
 
 // MARK: - UIImage Extension to Rotate an Image
 extension UIImage {
-    /// Rotates the image by the given degrees.
     func rotated(by degrees: CGFloat) -> UIImage? {
         let radians = degrees * .pi / 180
-        // Calculate the new size after rotation
         var newSize = CGRect(origin: .zero, size: self.size)
             .applying(CGAffineTransform(rotationAngle: radians))
             .integral.size
-        // Ensure newSize is valid (avoid zero size)
         newSize.width = max(newSize.width, 1)
         newSize.height = max(newSize.height, 1)
         
         UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
         guard let context = UIGraphicsGetCurrentContext() else { return nil }
-        // Move origin to the middle of the new image so rotation occurs around center
         context.translateBy(x: newSize.width / 2, y: newSize.height / 2)
-        // Rotate the context
         context.rotate(by: radians)
-        // Draw the image at its center
         self.draw(in: CGRect(x: -self.size.width / 2,
                              y: -self.size.height / 2,
                              width: self.size.width,
                              height: self.size.height))
-        // Grab the rotated image from the context
         let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return rotatedImage
@@ -90,6 +83,10 @@ struct EditView: View {
                                         PreviewThumbnail(viewModel: viewModel.pdfViewModel, pdfViewProxy: pdfView)
                                             .frame(height: 68)
                                             .padding(.vertical, 24)
+                                    } else {
+                                        Color.clear
+                                              .frame(height: 68)
+                                              .padding(.vertical, 24)
                                     }
                                 }
                             }
@@ -220,7 +217,6 @@ struct EditView: View {
             let pdfStampSize = CGSize(width: stampSize.width / pdfScale,
                                       height: stampSize.height / pdfScale)
             
-            // Adjust the annotation rect as before
             let annotationRect = CGRect(
                 x: pdfPoint.x - pdfStampSize.width / 2 - 25,
                 y: pdfPoint.y - pdfStampSize.height / 2,
@@ -305,7 +301,6 @@ struct EditView: View {
             
             let absolutePos = currentCenter
             
-            // Rotation handle button
             Circle()
                 .fill(Color.c0666EB)
                 .frame(width: 24, height: 24)
@@ -336,7 +331,6 @@ struct EditView: View {
                         }
                 )
             
-            // Delete button
             Circle()
                 .fill(Color.cDB341E)
                 .frame(width: 24, height: 24)
@@ -356,7 +350,6 @@ struct EditView: View {
                     viewModel.editState = false
                 }
             
-            // Resize handle button
             Circle()
                 .fill(Color.c0666EB)
                 .frame(width: 24, height: 24)

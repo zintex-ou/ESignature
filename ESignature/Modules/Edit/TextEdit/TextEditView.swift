@@ -49,7 +49,6 @@ struct TextEditView: View, KeyboardReadable {
                 
                 colorPicker
                     .opacity(isKeyboardVisible ? 1 : 0)
-//                    .padding(.bottom, isKeyboardVisible ? 216 : 0)
             }
         }
     }
@@ -119,39 +118,6 @@ struct TextEditView: View, KeyboardReadable {
         .frame(maxWidth: .infinity)
         .background(.white)
     }
-    
-//    @ViewBuilder
-//    private var colorPicker: some View {
-//        
-//        ZStack {
-//            HStack(spacing: 16) {
-//                ForEach(ColorsEnum.allCases, id: \.self) { item in
-//                    Button {
-//                        textColor = item
-//                    } label: {
-//                        Circle()
-//                            .fill(item.color)
-//                            .frame(width: 30, height: 30)
-//                            .overlay(
-//                                Circle()
-//                                    .stroke(item.color == textColor.color ? Color.white : Color.clear, lineWidth: 2)
-//                                    .frame(width: 22, height: 22)
-//                            )
-//                    }
-//                    .padding(.horizontal, 8)
-//                }
-//                
-//                ColorPicker("", selection: $textColor)
-//                    .scaleEffect(CGSize(width: 1.1, height: 1.1))
-//                    .labelsHidden()
-//                    .padding(.leading)
-//            }
-//            .frame(height: 72)
-//            .frame(maxWidth: .infinity)
-//        }
-//        .frame(maxWidth: .infinity)
-//        .background(.white)
-//    }
     
     func measuredWidth(for text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 17)

@@ -46,10 +46,6 @@ struct WatermarkSheetView: View {
                             Button("From Files") {
                                 viewModel.showFileWatermark()
                             }
-//                
-//                            Button("Cancel", role: .cancel) {
-//                
-//                            }
                 
                         }
                     }

@@ -38,31 +38,44 @@ struct MainView: View {
             .zIndex(1)
             
             VStack(spacing: 0) {
-                ScrollView {
-                    Image(R.image.mainBack)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity, minHeight: 406, maxHeight: 406)
-                        .clipped()
-                        .clipShape(RoundedBottomCorners(radius: 16))
-                        .ignoresSafeArea()
+                if viewModel.documents?.count != 0 {
+                    ScrollView {
+                        Image(R.image.mainBack)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, minHeight: 406, maxHeight: 406)
+                            .clipped()
+                            .clipShape(RoundedBottomCorners(radius: 16))
+                            .ignoresSafeArea()
+                        
+                            historyStack
+                                .padding(.top, 16)
+                            Spacer()
+                        
+                    }
+                    .ignoresSafeArea()
+                    .scrollDisabled(true)
+                } else {
+                    
+                        Image(R.image.mainBack)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, minHeight: 406, maxHeight: 406)
+                            .clipped()
+                            .clipShape(RoundedBottomCorners(radius: 16))
+                            .ignoresSafeArea()
+
+                    Spacer()
                     
                     if viewModel.documents?.count == 0 {
-                        Spacer()
                         emptyViewStack
-                        Spacer()
-                    } else {
-                        historyStack
-                         .padding(.top, 16)
-                        Spacer()
                     }
                     
-//                    Spacer()
+                    Spacer()
+                    
                 }
-                .ignoresSafeArea()
-                .scrollDisabled(true)
-
             }
 
             

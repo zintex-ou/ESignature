@@ -94,7 +94,7 @@ struct SignedViewCell: View {
             if let pdfData = sharedPDFData {
                 ShareSheet(activityItems: [pdfData])
             } else {
-                Text("Не удалось загрузить PDF файл")
+                Text("Cant load PDF")
             }
         }
     }

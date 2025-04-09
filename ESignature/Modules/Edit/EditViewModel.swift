@@ -286,10 +286,6 @@ final class EditViewModel: ObservableObject {
         shouldShowTextEditor = true
     }
     
-    //    func showTextEditView() {
-    //        output?.showTextEdit(self)
-    //    }
-    
     func showGalleryStamp() {
         shouldShowGalleryStamp = true
     }

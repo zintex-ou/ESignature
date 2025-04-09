@@ -83,9 +83,6 @@ struct StampSheetView: View {
                                 } else {
                                     viewModel.selectedOverlay = stamp
                                     viewModel.editImage = stamp.image
-//                                    viewModel.signCompletion { [weak self] image in
-//
-//                                    }
                                         viewModel.editState = true
                                     
                                 }
