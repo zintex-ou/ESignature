@@ -219,7 +219,7 @@ struct EditView: View {
         
         let annotationRect = CGRect(
             x: pdfPoint.x - pdfStampSize.width / 2 - 25,
-            y: pdfPoint.y - pdfStampSize.height / 2,
+            y: pdfPoint.y - pdfStampSize.height / 2 - 10,
             width: pdfStampSize.width,
             height: pdfStampSize.height
         )
