@@ -362,12 +362,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ESignature/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = eSignuture;
-				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera";
-				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your documents";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera to scan documents that would be signed";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder to extract pdf files for adding E -signatures and to save files";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your app documents";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -375,7 +376,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pdfsignature.electronic.doc.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -398,12 +399,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ESignature/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = eSignuture;
-				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera";
-				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your documents";
+				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera to scan documents that would be signed";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder to extract pdf files for adding E -signatures and to save files";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your app documents";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -411,7 +413,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pdfsignature.electronic.doc.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

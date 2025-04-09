@@ -1,0 +1,9 @@
+app_identifier("pdfsignature.electronic.doc.com") # The bundle identifier of your app
+apple_id("1plinerverlinegwh7@gmail.com") # Your Apple Developer Portal username
+itunes_connect_id "1plinerverlinegwh7@gmail.com" # In most cases the same as apple_id
+team_id "C27L7G9RA2" # You can find it on developer.apple.com, membership section
+itc_team_id "127662736" # A bit harder to find. https://stackoverflow.com/questions/42960644/how-to-get-itunes-connect-team-id-and-team-name
+
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
