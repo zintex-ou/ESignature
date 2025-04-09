@@ -1,0 +1,76 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+# uncomment this line if you need Arkana 
+#fastlane_require 'dotenv'
+
+ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+
+platform :ios do
+
+  appid = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+
+  # uncomment this line if you need Arkana
+  #before_all do
+  #  Dotenv.load
+  #end
+
+  desc "Lane to build and upload build"
+    lane :beta do
+      certificates
+      build_app(export_method: "app-store")
+      app_store_connect_api_key(
+        key_id: "XL3AJAL7TT",
+        issuer_id: "abc00cd3-ad69-4884-9edf-a1ea48e9c192",
+        key_filepath: "AuthKey_XL3AJAL7TT.p8"
+      )
+      upload_to_testflight(skip_waiting_for_build_processing: true)
+    end
+
+  desc "Test if you setup certs git repo correctly"
+    lane :get_cert do
+      UI.message "Loaded MATCH_PASSWORD: #{ENV['MATCH_PASSWORD']}"
+      match(
+        type: "appstore",
+        app_identifier: appid,
+        readonly: true,
+        verbose: true
+      )
+      match(
+        type: "development",
+        app_identifier: appid,
+        readonly: true,
+        verbose: true
+      )
+    end
+
+  desc "Get certificates"
+    lane :certificates do
+      sync_code_signing(
+        type: "development",
+        app_identifier: [appid],
+        force_for_new_devices: true,
+        readonly: true
+      )
+
+      # You can repeate the sync_code_signing with other types of certificates such as appstore and adhoc
+      sync_code_signing(
+        type: "appstore",
+        app_identifier: appid,
+        readonly: true
+      )
+    end
+end
