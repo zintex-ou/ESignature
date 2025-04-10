@@ -13,7 +13,7 @@ struct PasswordView: View {
     private let pinLength: Int = 4
     
     @State private var shakeTrigger: CGFloat = 0
-    
+        
     var body: some View {
         ZStack {
             
@@ -71,6 +71,7 @@ struct PasswordView: View {
                         
                         if viewModel.isPresent {
                             viewModel.dismiss()
+                            viewModel.onUnlockComplete?()
                         } else {
                             viewModel.showResetPassoword()
                         }
@@ -148,7 +149,3 @@ struct ShakeEffect: GeometryEffect {
         return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
     }
 }
-
-
-
-

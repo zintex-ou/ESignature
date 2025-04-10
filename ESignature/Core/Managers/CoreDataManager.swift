@@ -93,6 +93,12 @@ class CoreDataManager {
         }
     }
     
+    func deleteDocument(_ document: DocumentEntity) {
+        context.delete(document)
+        saveContext()
+    }
+
+    
     // MARK: - Sign Methods
     
     func createSign(id: String, url: String, name: String) {

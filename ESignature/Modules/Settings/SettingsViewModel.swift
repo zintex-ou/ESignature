@@ -117,6 +117,10 @@ final class SettingsViewModel: NSObject, ObservableObject {
         }
         
     }
+    
+    func checkPremium() -> Bool {
+        return PurchaseManager.shared.isPremium
+    }
 }
 
 extension SettingsViewModel: MFMailComposeViewControllerDelegate {

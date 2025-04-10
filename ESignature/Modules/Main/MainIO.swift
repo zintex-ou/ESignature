@@ -9,7 +9,8 @@ protocol MainOutput: AnyObject {
         image: UIImage?,
         fileURL: URL?,
         fileName: String?,
-        isHistory: Bool
+        isHistory: Bool,
+        documentID: String
     )
     
     func showScanner(scanResult: Binding<[UIImage]>)

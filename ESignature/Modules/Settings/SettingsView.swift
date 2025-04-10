@@ -15,8 +15,10 @@ struct SettingsView: View {
                 .padding(.top, 8)
                 
                 VStack(spacing: 16) {
-                    PremiumBannerView()
-                        .frame(height: 126)
+                    if !viewModel.checkPremium() {
+                        PremiumBannerView()
+                            .frame(height: 126)
+                    }
                     
                     VStack(spacing: 10) {
                         ForEach(SettingsEnum.allCases, id: \.self) { item in

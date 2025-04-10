@@ -121,12 +121,21 @@ struct OnboardView: View {
                 .lineLimit(2)
                 .foregroundStyle(.white)
             
-            Text(desc[currentPage])
-                .font(.custom(R.font.outfitRegular, size: 16))
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .foregroundStyle(.white)
-                .opacity(0.5)
+            if currentPage == 4 {
+                Text(viewModel.descText())
+                    .font(.custom(R.font.outfitRegular, size: 16))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .foregroundStyle(.white)
+                    .opacity(0.5)
+            } else {
+                Text(desc[currentPage])
+                    .font(.custom(R.font.outfitRegular, size: 16))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .foregroundStyle(.white)
+                    .opacity(0.5)
+            }
         }
     }
     
@@ -188,12 +197,10 @@ struct OnboardView: View {
                             }
                             .frame(width: 16, height: 16)
                     }
-                    
                 }
                 Spacer()
             }
   
-                
             HStack {
                 Spacer()
                 Text(R.string.localizable.restore())
@@ -204,14 +211,8 @@ struct OnboardView: View {
                         viewModel.tapOnRestore {
                             viewModel.dissmis()
                         }
-                        
                     }
-
-            
             }
-
-            
-
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)

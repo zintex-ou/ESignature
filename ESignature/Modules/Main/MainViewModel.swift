@@ -73,7 +73,7 @@ final class MainViewModel: NSObject, ObservableObject {
             pdfDocument.write(to: pdfURL)
             print("PDF saved as: \(pdfURL.lastPathComponent)")
             loadSavedPDFs()
-            showFile(pdfURL.lastPathComponent, fileName: pdfURL.lastPathComponent)
+            addFile(pdfURL.lastPathComponent, fileName: pdfURL.lastPathComponent)
         } catch {
             print("Failed to save PDF: \(error.localizedDescription)")
         }
@@ -185,9 +185,15 @@ final class MainViewModel: NSObject, ObservableObject {
     }
     
     @MainActor
+    func addFile(_ relativePath: String, fileName: String?) {
+        let fileURL = fileManagerService.getAbsoluteURL(from: relativePath)
+        output?.showEdit(image: nil, fileURL: fileURL, fileName: fileName, isHistory: false, documentID: selectedDocumentID ?? "")
+    }
+    
+    @MainActor
     func showFile(_ relativePath: String, fileName: String?) {
         let fileURL = fileManagerService.getAbsoluteURL(from: relativePath)
-        output?.showEdit(image: nil, fileURL: fileURL, fileName: fileName, isHistory: false)
+        output?.showEdit(image: nil, fileURL: fileURL, fileName: fileName, isHistory: true, documentID: selectedDocumentID ?? "")
     }
     
     func fetchDocuments() {
@@ -259,6 +265,10 @@ final class MainViewModel: NSObject, ObservableObject {
         } catch {
             print("Consert error: \(error.localizedDescription)")
         }
+    }
+    
+    func checkPremium() -> Bool {
+        return PurchaseManager.shared.isPremium
     }
     
     func checkTrialSubscription() -> Bool {

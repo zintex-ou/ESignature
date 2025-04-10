@@ -57,8 +57,8 @@ class Assembly {
         return controller
     }
     
-    func makePassword(output: PasswordOutput, isPresent: Bool) -> UIHostingController<some View> {
-        let passwordView = PasswordView(viewModel: .init(output: output, isPresent: isPresent))
+    func makePassword(output: PasswordOutput, isPresent: Bool, onUnlockComplete: (() -> Void)?) -> UIHostingController<some View> {
+        let passwordView = PasswordView(viewModel: .init(output: output, isPresent: isPresent, onUnlockComplete: onUnlockComplete))
         let controller = UIHostingController(rootView: passwordView)
         return controller
     }
@@ -70,7 +70,7 @@ class Assembly {
         fileURL: URL?,
         fileName: String?,
         isHistory: Bool,
-        documentID: String? = nil
+        documentID: String
     ) -> UIHostingController<EditView> {
         let editView = EditView(viewModel: .init(
             output: output,
@@ -91,7 +91,7 @@ class Assembly {
         fileURL: URL?,
         fileName: String?,
         isHistory: Bool,
-        documentID: String? = nil
+        documentID: String
     ) -> UIHostingController<some View> {
         let saveView = SaveView(viewModel: .init(
             output: output,

@@ -48,11 +48,13 @@ struct EditView: View {
     
     var body: some View {
         ZStack(alignment: .top) {
+            
             VStack(spacing: 0) {
                 navBar
                 
                 GeometryReader { geometry in
                     ZStack {
+                        
                         VStack(spacing: 0) {
                             
                             if let _ = viewModel.fileURL {
@@ -90,6 +92,15 @@ struct EditView: View {
                                     }
                                 }
                             }
+                        }
+                        
+                        VStack {
+                            Spacer()
+                            if viewModel.isLoading {
+                                CustomLoaderView()
+                                    .zIndex(1)
+                            }
+                            Spacer()
                         }
                         
                         if viewModel.editState {
@@ -157,9 +168,7 @@ struct EditView: View {
             .background(Color(.c00000050))
         }
         .onAppear {
-            viewModel.fetchStamps()
-            viewModel.fetchSigns()
-            viewModel.fetchWatermarks()
+            viewModel.fetchOverlays()
         }
         .photosPicker(isPresented: $viewModel.shouldShowGalleryStamp,
                       selection: $viewModel.stampItem,
@@ -286,7 +295,6 @@ struct EditView: View {
         pdfView.setNeedsDisplay()
     }
     
-    
     private func angleBetween(point: CGPoint, and center: CGPoint) -> Double {
         let deltaY = Double(point.y - center.y)
         let deltaX = Double(point.x - center.x)
@@ -339,6 +347,7 @@ struct EditView: View {
                             
                             circleLocation = newLocation
                             dragOffset = .zero
+                            viewModel.setOverlayPosition = true
                         }
                 )
                 .contentShape(Rectangle())
@@ -442,6 +451,7 @@ struct EditView: View {
             HStack(spacing: 16) {
                 if viewModel.editState {
                     Button {
+                        if viewModel.setOverlayPosition {
                         if let image = viewModel.editImage,
                            let location = circleLocation {
                             let point = CGPoint(x: location.x + dragOffset.width, y: location.y + dragOffset.height)
@@ -461,10 +471,15 @@ struct EditView: View {
                             }
                         }
                         viewModel.editState = false
-                        viewModel.saveSigned(id: viewModel.documentID ?? "")
+                        viewModel.setOverlayPosition = false
                         rotationAngle = 0.0
+                            viewModel.saveSigned(id: viewModel.documentID)
+                        } else {
+                            viewModel.editState = false
+                        }
                     } label: {
-                        Text(R.string.localizable.apply())
+                        Text(viewModel.setOverlayPosition ?
+                             R.string.localizable.apply() : R.string.localizable.cancel())
                             .font(.custom(R.font.outfitSemiBold, size: 16))
                     }
                     .buttonStyle(BlueButtonStyle())
@@ -505,12 +520,19 @@ struct EditView: View {
     @ViewBuilder
     private var navBar: some View {
         ZStack {
-            Text("\(viewModel.pdfViewModel.currentPageIndex + 1) of \(String(describing: viewModel.pdfDocument?.pageCount ?? 0))")
-                .font(.custom(R.font.outfitRegular, size: 14))
-                .foregroundStyle(.c7C7C7C)
+            if !viewModel.editState {
+                Text("\(viewModel.pdfViewModel.currentPageIndex + 1) of \(String(describing: viewModel.pdfDocument?.pageCount ?? 0))")
+                    .font(.custom(R.font.outfitRegular, size: 14))
+                    .foregroundStyle(.c7C7C7C)
+            }
+            
             HStack(spacing: 8) {
                 Button {
-                    viewModel.pop()
+                    if viewModel.editState {
+                        viewModel.editState = false
+                    } else {
+                        viewModel.pop()
+                    }
                 } label: {
                     Image(systemName: "xmark")
                         .foregroundColor(.black)
@@ -519,20 +541,23 @@ struct EditView: View {
                 
                 Spacer()
                 
-                Button {
-                    viewModel.showSave()
+                
+                if !viewModel.editState {
                     
+                    Button {
+                        viewModel.showSave()
+                    } label: {
+                        Text(R.string.localizable.save)
+                            .font(.custom(R.font.outfitSemiBold, size: 14))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
+                    }
+                    .background(.c0666EB)
+                    .foregroundColor(.white)
+                    .cornerRadius(24)
                     
-                } label: {
-                    Text(R.string.localizable.save)
-                        .font(.custom(R.font.outfitSemiBold, size: 14))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
                 }
-                .background(.c0666EB)
-                .foregroundColor(.white)
-                .cornerRadius(24)
             }
         }
         .padding(.top, 16)

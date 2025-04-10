@@ -98,6 +98,8 @@
 "share" = "Compartir";
 "share App" = "Compartir aplicación";
 "sign, share, add stamps & watermarks — $6.99/week with 3-day free trial." = "Firme, comparta, añada sellos y marcas de agua: 6,99 €/semana con una prueba gratuita de 3 días.";
+"sign, share, add stamps & watermarks —" = "Firmar, compartir, añadir sellos y marcas de agua —";
+"with 3-day free trial." = "con prueba gratuita de 3 días.";
 "signature" = "Firma";
 "signatures" = "Firmas";
 "signed" = "Firmado";

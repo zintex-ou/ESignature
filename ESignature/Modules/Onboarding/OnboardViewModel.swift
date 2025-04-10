@@ -35,7 +35,6 @@ final class OnboardViewModel: ObservableObject {
         self.onComplete = onComplete
         Task { await fetchPayWall() }
         setupReachability()
-
     }
     
     deinit {
@@ -68,6 +67,13 @@ final class OnboardViewModel: ObservableObject {
         return "\(R.string.localizable.startWith3DayTrialThen()) \(priceText())."
         
     }
+    
+    func descText() -> String {
+        let price = priceText()
+     
+        return "\(R.string.localizable.signShareAddStampsWatermarks()) \(String(describing: weeklyProduct?.currencySymbol ?? ""))\(String(describing: weeklyProduct?.price ?? 6.99)) / \(R.string.localizable.week()) \(R.string.localizable.with3DayFreeTrial())"
+            }
+    
     
     private func priceText() -> LocalizedStringResource {
 
@@ -169,8 +175,6 @@ final class OnboardViewModel: ObservableObject {
     private func setLoading(_ isLoading: Bool) {
         self.isLoading = isLoading
     }
-
-    
     
     @MainActor
     private func handlePurchaseSuccess(completion: () -> Void) {

@@ -78,7 +78,6 @@ struct MainView: View {
                 }
             }
 
-            
             DefaultBottomSheet(
                 isOpen: $viewModel.shouldRenameSheet,
                 style: bottomSheetStyle,
@@ -242,13 +241,14 @@ struct MainView: View {
             
             Spacer()
             
-            Button {
-                    viewModel.showPaywall()
-            } label: {
-                Image(.pro)
-                    .frame(width: 67, height: 28)
+            if !viewModel.checkPremium() {
+                Button {
+                        viewModel.showPaywall()
+                } label: {
+                    Image(.pro)
+                        .frame(width: 67, height: 28)
+                }
             }
-
         }
         .padding(.horizontal, 16)
         .padding(.top, 13)
@@ -301,8 +301,6 @@ struct MainView: View {
                 .padding(.top, 16)
                 ScrollView {
                 VStack(spacing: 12) {
-                 
-
                     ForEach(sortDisplayDocs(), id: \.id) { doc in
                         HStack {
                             SignedViewCell(name: doc.name,
@@ -313,6 +311,7 @@ struct MainView: View {
                                            path: doc.url, 
                                            viewModel: viewModel)
                             .onTapGesture {
+                                viewModel.selectedDocumentID = doc.id
                                 viewModel.showFile(doc.url ?? "", fileName: doc.name)
                             }
                         }

@@ -12,10 +12,13 @@ final class PasswordViewModel: ObservableObject {
     
     var isPresent: Bool
     
-    init(output: PasswordOutput? = nil, keychainManager: KeychainManager = KeychainManager(), isPresent: Bool) {
+    var onUnlockComplete: (() -> Void)?
+    
+    init(output: PasswordOutput? = nil, keychainManager: KeychainManager = KeychainManager(), isPresent: Bool, onUnlockComplete: (() -> Void)? = nil) {
         self.output = output
         self.keychainManager = keychainManager
         self.isPresent = isPresent
+        self.onUnlockComplete = onUnlockComplete
         
         self.bioEnable = keychainManager.bioEnable ?? false
     }

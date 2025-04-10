@@ -42,6 +42,8 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
     
     func startMain() {
         navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.interactivePopGestureRecognizer?.delegate = self
+        navigationController.interactivePopGestureRecognizer?.isEnabled = true
         let mainHost = assembly.makeMain(output: self)
         UserDefaults.standard.set(true, forKey: AppConstants.isLauchedBefore)
         navigationController.setViewControllers([mainHost], animated: true)
@@ -192,11 +194,19 @@ extension Coordinator: MainOutput {
     
     func showEdit(
         image: UIImage?,
-        fileURL: URL?,
+        fileURL: URL?,  
         fileName: String?,
-        isHistory: Bool
+        isHistory: Bool,
+        documentID: String
     ) {
-        let editHost = assembly.makeEdit(output: self, image: image, fileURL: fileURL, fileName: fileName, isHistory: isHistory)
+        let editHost = assembly.makeEdit(
+            output: self,
+            image: image,
+            fileURL: fileURL,
+            fileName: fileName,
+            isHistory: isHistory,
+            documentID: documentID
+        )
         navigationController.pushViewController(editHost, animated: true)
     }
     
@@ -245,9 +255,17 @@ extension Coordinator: EditOutput {
         image: UIImage?,
         fileURL: URL?,
         fileName: String?,
-        isHistory: Bool
+        isHistory: Bool,
+        documentID: String
     ) {
-        let saveHost = assembly.makeSave(output: self, image: image, fileURL: fileURL, fileName: fileName, isHistory: isHistory)
+        let saveHost = assembly.makeSave(
+            output: self,
+            image: image,
+            fileURL: fileURL,
+            fileName: fileName,
+            isHistory: isHistory,
+            documentID: documentID
+        )
         navigationController.pushViewController(saveHost, animated: true)
     }
 }
@@ -261,14 +279,14 @@ extension Coordinator: AuthOutput {
         navigationController.pushViewController(resetPasswordHost, animated: true)
     }
     
-    func showPasswordPresent() {
-        let passwordHost = assembly.makePassword(output: self, isPresent: true)
+    func showPasswordPresent(onUnlockComplete: @escaping () -> Void) {
+        let passwordHost = assembly.makePassword(output: self, isPresent: true, onUnlockComplete: onUnlockComplete)
         passwordHost.modalPresentationStyle = .fullScreen
         navigationController.present(passwordHost, animated: true)
     }
     
     func showPassword() {
-        let passwordHost = assembly.makePassword(output: self, isPresent: false)
+        let passwordHost = assembly.makePassword(output: self, isPresent: false, onUnlockComplete: nil)
         navigationController.pushViewController(passwordHost, animated: true)
     }
 }
@@ -281,3 +299,8 @@ extension Coordinator: ResetPasswordOutput { }
 
 extension Coordinator: PasswordOutput { }
 
+extension Coordinator: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return navigationController.viewControllers.count > 1
+    }
+}

@@ -126,7 +126,7 @@ extension PaywallViewModel {
             if !adaptyProduct.isFreeTrial {
                 return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration)"
             } else {
-                return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration) \(R.string.localizable.with3DayFreeTrial)"
+                return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration) \(R.string.localizable.with3DayFreeTrial())"
             }
     }
     

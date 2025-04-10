@@ -172,4 +172,8 @@ class FileManagerService {
             print("Failed to delete file: \(error.localizedDescription)")
         }
     }
+    
+    func deleteFile(at url: URL) throws {
+        try FileManager.default.removeItem(at: url)
+    }
 }

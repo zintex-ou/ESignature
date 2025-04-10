@@ -36,7 +36,8 @@ final class EditViewModel: ObservableObject {
     @Published var fileName: String?
     @Published var isSaved: Bool = false
     
-    // MARK: DrawView
+    @Published var setOverlayPosition: Bool = false
+    
     @Published var drawingColor: Color = .black
     @State var showColorPicker = false
     @Published var lines: [Line] = []
@@ -56,7 +57,7 @@ final class EditViewModel: ObservableObject {
     var onWatermarkAdded: ((UIImage, CGRect) -> Void)?
     
     let isHistory: Bool
-    var documentID: String?
+    var documentID: String
     
     private var coreDataManager = CoreDataManager.shared
     private var fileManagerService = FileManagerService.shared
@@ -69,6 +70,8 @@ final class EditViewModel: ObservableObject {
     @Published var stampItem: PhotosPickerItem? = nil
     @Published var signItem: PhotosPickerItem? = nil
     @Published var watermarkItem: PhotosPickerItem? = nil
+    
+    @Published var isLoading: Bool = false
     
     weak var output: EditOutput?
     
@@ -83,7 +86,7 @@ final class EditViewModel: ObservableObject {
         }
     }
     
-    init(output: EditOutput?, image: UIImage? = nil, imageName: String? = nil, fileURL: URL? = nil, fileName: String? = nil, isHistory: Bool, documentID: String? = nil) {
+    init(output: EditOutput?, image: UIImage? = nil, imageName: String? = nil, fileURL: URL? = nil, fileName: String? = nil, isHistory: Bool, documentID: String) {
         self.image = image?.fixedOrientation()
         self.fileURL = fileURL
         self.output = output
@@ -95,16 +98,24 @@ final class EditViewModel: ObservableObject {
         self.pdfDocument = pdfViewModel.document
         
         if !isHistory {
-            saveObject()
-        }
+             saveObject()
+         } else {
+             print("documentID \(documentID)")
+             if let document = coreDataManager.loadDocumentItem(with: documentID) {
+                 self.fileURL = fileManagerService.getAbsoluteURL(from: document.url ?? "")
+                 self.fileName = document.name
+             }
+         }
     }
-
     
     func showSave() {
-            output?.showSave(image: nil, fileURL: fileURL, fileName: fileName, isHistory: false)
-        }
+        output?.showSave(image: nil, fileURL: fileURL, fileName: fileName, isHistory: true, documentID: documentID)
+    }
     
-
+    @MainActor
+    private func setLoading(_ isLoading: Bool) {
+        self.isLoading = isLoading
+    }
     
     func printAction() {
         do {
@@ -112,6 +123,16 @@ final class EditViewModel: ObservableObject {
         } catch {
             print("Can't print file: \(fileURL), error: \(error.localizedDescription)")
         }
+    }
+    
+    func fetchOverlays() {
+        setLoading(true)
+        
+        fetchSigns()
+        fetchStamps()
+        fetchWatermarks()
+        
+        setLoading(false)
     }
     
     func fetchStamps() {
@@ -126,7 +147,6 @@ final class EditViewModel: ObservableObject {
             
             return OverlaysModel(id: id, name: name, image: image, type: .stamp)
         }
-        
         print("Converted to \(stampsModel.count) valid overlay models")
     }
     
@@ -140,7 +160,6 @@ final class EditViewModel: ObservableObject {
                   let id = UUID(uuidString: idString),
                   let image = fileManagerService.getImage(fileName: name) else { return nil }
             print("Converted to \(String(describing: sign.url)) valid overlay models")
-            
             
             return OverlaysModel(id: id, name: name, image: image, type: .signature)
         }
@@ -158,7 +177,6 @@ final class EditViewModel: ObservableObject {
                   let id = UUID(uuidString: idString),
                   let image = fileManagerService.getImage(fileName: name) else { return nil }
             print("Converted to \(String(describing: watermarks.url)) valid overlay models")
-            
             
             return OverlaysModel(id: id, name: name, image: image, type: .watermark)
         }
@@ -238,7 +256,34 @@ final class EditViewModel: ObservableObject {
         }
     }
     
+    func deleteObject() {
+        task = Task(priority: .high) { [weak self] in
+            guard let self = self else { return }
+            
+            guard let fileURL = self.fileURL else {
+                print("File URL not available")
+                return
+            }
+            
+            let relativePath = self.fileManagerService.getRelativePath(for: fileURL)
+            
+            if let document = self.coreDataManager.loadDocumentItem(with: relativePath) {
+                self.coreDataManager.deleteDocument(document)
+            } else {
+                print("Document not found in Core Data with URL: \(relativePath)")
+            }
+            
+            do {
+                try self.fileManagerService.deleteFile(at: fileURL)
+                print("File successfully deleted at \(fileURL.path)")
+            } catch {
+                print("Failed to delete file: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func saveSigned(id: String) {
+
         task = Task(priority: .high) { [weak self] in
             guard let self = self else { return }
             
@@ -269,13 +314,16 @@ final class EditViewModel: ObservableObject {
         output?.pop()
     }
     
+    func popToRoot() {
+        output?.popToRoot()
+    }
+    
     func tapOnPreviewImage(stmp: OverlaysModel) {
         selectedOverlay = stmp
     }
     
     func tapOnSign() {
         shouldShowSignSheet = true
-        
     }
     
     func tapOnStamp() {
@@ -365,7 +413,6 @@ final class EditViewModel: ObservableObject {
         Task {
             do {
                 let processedImage = try BackgroundRemoval().removeBackground(image: uiImage)
-                
                 
                 let annotationFrame = CGRect(x: 100, y: 100, width: 150, height: 150)
                 
@@ -471,7 +518,6 @@ final class EditViewModel: ObservableObject {
             } catch {
                 print("Failed to load image:", error)
             }
-            
         }
     }
     
@@ -646,4 +692,3 @@ final class EditViewModel: ObservableObject {
         return image
     }
 }
-

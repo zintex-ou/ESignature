@@ -84,7 +84,7 @@ struct SignedViewCell: View {
                 Image(.more)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 24, height: 24)
+                    .frame(width: 40, height: 40)
                     .padding(.trailing, 8)
             }
             

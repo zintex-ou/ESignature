@@ -43,36 +43,53 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        
-        
         if UserDefaults.standard.bool(forKey: AppConstants.isLauchedBefore) {
             coordinator.addShortcutActionMenu()
-            
-            if !coordinator.checkPremium() {
-                if isPad {
-                    coordinator.showPadPaywall()
-                } else {
-                    coordinator.showPaywall()
+
+            if keychainManager.hasPassword ?? false {
+                if let lastLockDate = keychainManager.timeLock,
+                   let gracePeriod = keychainManager.gracePeriod {
+                    let timeElapsed = Date().timeIntervalSince(lastLockDate)
+                    if timeElapsed < gracePeriod {
+                        showPaywallIfNeeded()
+                        return
+                    }
                 }
+
+                coordinator.showPasswordPresent(onUnlockComplete: { [weak self] in
+                    self?.showPaywallIfNeeded()
+                })
+                return
             }
-            
-            guard let shortCutItem else { return }
+
+            showPaywallIfNeeded()
+        }
+        
+    }
+
+    private func showPaywallIfNeeded() {
+        if !coordinator.checkPremium() {
+            if isPad {
+                coordinator.showPadPaywall()
+            } else {
+                coordinator.showPaywall()
+            }
+        }
+
+        if let shortCutItem {
             _ = handle(shortcutItem: shortCutItem)
         }
-        
-        if keychainManager.hasPassword ?? false {
-            if let lastLockDate = keychainManager.timeLock,
-               let gracePeriod = keychainManager.gracePeriod {
-                let timeElapsed = Date().timeIntervalSince(lastLockDate)
-                if timeElapsed < gracePeriod {
-                    return
-                }
-            }
-            coordinator.showPasswordPresent()
-        }
-        
-
     }
+    
+    func windowScene(
+        _ windowScene: UIWindowScene,
+        performActionFor shortcutItem: UIApplicationShortcutItem,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        let handled = handle(shortcutItem: shortcutItem)
+        completionHandler(handled)
+    }
+
     
     @discardableResult
     func handle(shortcutItem: UIApplicationShortcutItem) -> Bool {

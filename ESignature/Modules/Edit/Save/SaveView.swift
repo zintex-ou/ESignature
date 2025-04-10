@@ -92,7 +92,7 @@ struct SaveView: View {
             ZStack {
                 HStack(spacing: 8) {
                     Button {
-                        viewModel.pop()
+                        viewModel.popToRoot()
                     } label: {
                         Image(systemName: "xmark")
                             .foregroundColor(.black)
