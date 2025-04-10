@@ -2,11 +2,6 @@ import UIKit
 import SwiftUI
 
 class Assembly {
-    private let useCasesAssembly: UseCasesAssemblyProtocol
-
-    init(useCasesAssembly: UseCasesAssemblyProtocol = UseCasesAssembly()) {
-        self.useCasesAssembly = useCasesAssembly
-    }
     
     func makeMain(output: MainOutput) -> UIHostingController<MainView> {
         let mainView = MainView(viewModel: .init(output: output))

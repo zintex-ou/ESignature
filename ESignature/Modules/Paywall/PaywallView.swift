@@ -92,7 +92,7 @@ struct PaywallView: View {
                 .lineLimit(2)
                 .foregroundStyle(.white)
             
-            Text(R.string.localizable.signShareAddStampsWatermarks699WeekWith3DayFreeTrial())
+            Text(viewModel.descText(adaptyProduct: viewModel.selectedProduct!))
                 .font(.custom(R.font.outfitRegular, size: 16))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
@@ -160,9 +160,7 @@ struct PaywallView: View {
                                 .frame(width: 16, height: 16)
                         }
                     }
-                    
                     Spacer()
-                    
                 }
                
                 HStack {
@@ -177,10 +175,7 @@ struct PaywallView: View {
                             viewModel.tapOnRestore {
                                 viewModel.dissmis()
                             }
-                            
                         }
-                    
-                    
                 }
             }
             .padding(.horizontal, 16)

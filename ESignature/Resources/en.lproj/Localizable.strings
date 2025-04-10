@@ -57,7 +57,8 @@
 
 // MARK: PaywallView
 "unlock full access" = "Unlock full access";
-"sign, share, add stamps & watermarks — $6.99/week with 3-day free trial." = "Sign, share, add stamps & watermarks — $6.99/week with 3-day free trial.";
+"sign, share, add stamps & watermarks — " = "Sign, share, add stamps & watermarks — ";
+" with 3-day free trial." = " with 3-day free trial.";
 
 // MARK: SettingsView
 "unlock E-signature" = "Unlock E-signature";

@@ -98,7 +98,6 @@ final class EditViewModel: ObservableObject {
             saveObject()
         }
     }
-    
 
     
     func showSave() {

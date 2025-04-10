@@ -118,6 +118,18 @@ extension PaywallViewModel {
         }
     }
     
+    func descText(adaptyProduct: PurchaiseProductModel) -> String {
+            
+            let price = String(describing: adaptyProduct.price)
+            let duration = adaptyProduct.timePeriod
+            
+            if !adaptyProduct.isFreeTrial {
+                return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration)"
+            } else {
+                return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration) \(R.string.localizable.with3DayFreeTrial)"
+            }
+    }
+    
     private func showNetworkError() {
         showAlert(
             title: R.string.localizable.badConnection(),
