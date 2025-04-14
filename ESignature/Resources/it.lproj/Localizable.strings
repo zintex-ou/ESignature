@@ -162,3 +162,5 @@
 "your signatures will appear here" = "Le tue firme appariranno qui";
 "your stamps will appear here" = "I tuoi timbri appariranno qui";
 "your watermarks will appear here" = "Le tue filigrane appariranno qui";
+"reset_password_warning" = "Per proteggere i tuoi dati personali, la reimpostazione della password eliminerà tutti i documenti e le firme salvati.";
+"delete_document_warning" = "Sei sicuro di voler eliminare questo documento?";

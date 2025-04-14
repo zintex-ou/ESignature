@@ -162,3 +162,5 @@
 "your signatures will appear here" = "As suas assinaturas aparecerão aqui";
 "your stamps will appear here" = "Os seus selos aparecerão aqui";
 "your watermarks will appear here" = "As suas marcas d'água aparecerão aqui";
+"reset_password_warning" = "Para proteger seus dados pessoais, a redefinição da senha excluirá todos os documentos e assinaturas salvos.";
+"delete_document_warning" = "Tem certeza de que deseja excluir este documento?";

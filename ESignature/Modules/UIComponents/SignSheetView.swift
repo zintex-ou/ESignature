@@ -34,28 +34,7 @@ struct SignSheetView: View {
                         .frame(height: 38)
                         .background(.c0666EB)
                         .clipShape(RoundedRectangle(cornerRadius: 24))
-                        .confirmationDialog(
-                            "Choose an option",
-                            isPresented: $viewModel.shouldShowingDialog,
-                            titleVisibility: .hidden
-                        ) {
-                            Button("Draw") {
-                                viewModel.showDraw()
-                            }
-                            
-                            Button("From Gallery") {
-                                viewModel.showGallerySign()
-                            }
-                
-                            Button("From Files") {
-                                viewModel.showFileSign()
-                            }
-                
-                            Button("Cancel", role: .cancel) {
-                
-                            }
-                
-                        }
+                     
                     }
                 }
                 .padding(.horizontal, 16)

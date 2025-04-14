@@ -30,6 +30,43 @@ class CoreDataManager {
         }
     }
     
+
+    func clearAllData() {
+        clearDocuments()
+        clearSigns()
+        clearStamps()
+        clearWatermarks()
+    }
+    
+    private func clearDocuments() {
+        clearEntity(entityName: "DocumentEntity")
+    }
+    
+    private func clearSigns() {
+        clearEntity(entityName: "SignEntity")
+    }
+    
+    private func clearStamps() {
+        clearEntity(entityName: "StampEntity")
+    }
+    
+    private func clearWatermarks() {
+        clearEntity(entityName: "WatermarkEntity")
+    }
+    
+    private func clearEntity(entityName: String) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)
+            saveContext()
+        } catch {
+            print("Failed to clear entity \(entityName): \(error.localizedDescription)")
+        }
+    }
+
+    
     // MARK: - Document Methods
     
     func createDocument(id: String, isSigned: Bool, url: String, name: String, image: UIImage) {

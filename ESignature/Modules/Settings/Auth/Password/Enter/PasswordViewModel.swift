@@ -6,9 +6,13 @@ final class PasswordViewModel: ObservableObject {
     
     weak var output: PasswordOutput?
     
+    private var fileManagerService = FileManagerService.shared
+    private var coreDataManager = CoreDataManager.shared
     private var keychainManager = KeychainManager()
     
     var bioEnable: Bool = false
+    
+    @Published var shouldShowingDialog: Bool = false
     
     var isPresent: Bool
     
@@ -49,7 +53,12 @@ final class PasswordViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     if success {
                         print("Biometric authentication successful")
-                        self.showResetPassoword()
+                        if self.isPresent {
+                            self.dismiss()
+                            self.onUnlockComplete?()
+                        } else {
+                            self.showResetPassoword()
+                        }
                     } else {
                         print("Biometric authentication failed: \(evaluateError?.localizedDescription ?? "Unknown error")")
                     }
@@ -58,6 +67,12 @@ final class PasswordViewModel: ObservableObject {
         } else {
             print("Biometric authentication not available: \(error?.localizedDescription ?? "Unknown error")")
         }
+    }
+    
+    func forgotPasswordReset() {
+        coreDataManager.clearAllData()
+        dismiss()
+        showResetPassoword()
     }
 }
 

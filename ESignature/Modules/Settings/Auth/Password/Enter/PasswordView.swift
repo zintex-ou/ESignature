@@ -13,7 +13,7 @@ struct PasswordView: View {
     private let pinLength: Int = 4
     
     @State private var shakeTrigger: CGFloat = 0
-        
+            
     var body: some View {
         ZStack {
             
@@ -55,7 +55,7 @@ struct PasswordView: View {
                 Spacer()
                 
                 Button(action: {
-                    print("Forgot password tapped")
+                    viewModel.shouldShowingDialog = true
                 }) {
                     Text(R.string.localizable.forgotAPassword())
                         .foregroundColor(.c7C7C7C)
@@ -63,6 +63,19 @@ struct PasswordView: View {
                         .underline()
                 }
                 .padding(.bottom, 32)
+                .confirmationDialog(
+                    R.string.localizable.reset_password_warning(),
+                    isPresented: $viewModel.shouldShowingDialog,
+                    titleVisibility: .visible
+                ) {
+                    Button(R.string.localizable.resetPasscode()) {
+                        viewModel.forgotPasswordReset()
+                    }
+        
+                    Button(R.string.localizable.cancel(), role: .cancel) {
+        
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
             .onChange(of: passcode) { newValue in
@@ -114,10 +127,9 @@ struct PasswordView: View {
                 Group {
                     if viewModel.bioEnable {
                         Button {
-                            print("Face ID tapped")
                             viewModel.authenticateWithBiometrics()
                         } label: {
-                            Image(R.image.faceIDIcon)
+                            Image(uiImage: getBiometricsName())
                                 .frame(width: 74, height: 74)
                         }
                     } else {
@@ -126,15 +138,35 @@ struct PasswordView: View {
                     }
                 }
                 
-                
                 NumberButton(title: "0") {
                     handleDigitTap("0")
                 }
                 
-                
                 Color.clear
                     .frame(width: 74, height: 74)
             }
+        }
+    }
+    
+    func getBiometricsType() -> LABiometryType {
+        let context = LAContext()
+        var error: NSError?
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+            return .none
+        }
+        return context.biometryType
+    }
+    
+    func getBiometricsName() -> UIImage {
+        switch getBiometricsType() {
+        case .faceID:
+            return R.image.faceIDIcon() ?? UIImage()
+        case .touchID:
+            return R.image.touchIdIcon() ?? UIImage()
+        case .none:
+            return UIImage()
+        @unknown default:
+            return UIImage()
         }
     }
 }

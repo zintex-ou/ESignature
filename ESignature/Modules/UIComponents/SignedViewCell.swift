@@ -59,7 +59,6 @@ struct SignedViewCell: View {
                     renameAction()
                 }) {
                     Label(R.string.localizable.rename(), image: "renameIcon")
-                    
                 }
                 
                 Button(action: {
@@ -74,9 +73,8 @@ struct SignedViewCell: View {
                         Label(R.string.localizable.print(), image: "printIcon")
                     }
                 
-                
                 Button(role: .destructive, action: {
-                    deleteAction()
+                    showDeleteDiolog()
                 }) {
                     Label(R.string.localizable.delete(), image: "deleteIcon")
                 }
@@ -87,7 +85,19 @@ struct SignedViewCell: View {
                     .frame(width: 40, height: 40)
                     .padding(.trailing, 8)
             }
-            
+            .confirmationDialog(
+                R.string.localizable.delete_document_warning(),
+                isPresented: $viewModel.shouldDeleteAction,
+                titleVisibility: .visible
+            ) {
+                Button(R.string.localizable.delete(), role: .destructive) {
+                    deleteAction()
+                }
+    
+                Button(R.string.localizable.cancel(), role: .cancel) {
+    
+                }
+            }
         }
         .frame(height: 46)
         .sheet(isPresented: $isShareSheetPresented) {
@@ -114,7 +124,6 @@ struct SignedViewCell: View {
         UIApplication.shared.shareFile(file: absURL)
     }
 
-
      private func printAction() {
          guard let path = path, let fileURL = URL(string: path) else {
              print("Invalid file path")
@@ -126,6 +135,10 @@ struct SignedViewCell: View {
              print("Can't print file: \(fileURL), error: \(error.localizedDescription)")
          }
      }
+    
+    private func showDeleteDiolog() {
+        viewModel.shouldDeleteAction = true
+    }
      
      private func deleteAction() {
          viewModel.deleteDocument(docName: name ?? "")

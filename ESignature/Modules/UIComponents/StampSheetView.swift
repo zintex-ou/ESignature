@@ -47,7 +47,7 @@ struct StampSheetView: View {
                                 viewModel.showFileStamp()
                             }
                 
-                            Button("Cancel", role: .cancel) {
+                            Button(R.string.localizable.cancel(), role: .cancel) {
                 
                             }
                 

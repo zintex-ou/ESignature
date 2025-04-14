@@ -283,7 +283,6 @@ final class EditViewModel: ObservableObject {
     }
     
     func saveSigned(id: String) {
-
         task = Task(priority: .high) { [weak self] in
             guard let self = self else { return }
             

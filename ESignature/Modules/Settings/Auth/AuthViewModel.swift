@@ -56,8 +56,10 @@ final class AuthViewModel: ObservableObject {
     
     func pinEnableToggle() {
         if keychainManager.password == nil {
+            print("password: \(keychainManager.password)")
             output?.showResetPassword()
         } else {
+            print("password: \(keychainManager.password)")
             keychainManager.hasPassword?.toggle()
             print("keychainManager.hasPassword \(String(describing: keychainManager.hasPassword))")
             pinEnable.toggle()

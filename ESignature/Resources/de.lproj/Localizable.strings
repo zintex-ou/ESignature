@@ -162,3 +162,5 @@
 "your signatures will appear here" = "Ihre Unterschriften werden hier angezeigt";
 "your stamps will appear here" = "Deine Stempel werden hier erscheinen";
 "your watermarks will appear here" = "Ihre Wasserzeichen werden hier angezeigt";
+"reset_password_warning" = "Um Ihre persönlichen Daten zu schützen, werden alle gespeicherten Dokumente und Signaturen beim Zurücksetzen des Passworts gelöscht.";
+"delete_document_warning" = "Sind Sie sicher, dass Sie dieses Dokument löschen möchten?";
