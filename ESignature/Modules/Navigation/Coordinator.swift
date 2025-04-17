@@ -4,7 +4,7 @@ import SwiftUI
 
 final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
     private let assembly: Assembly
-    private var navigationController: UINavigationController
+    var navigationController: UINavigationController
     var window: UIWindow!
     
     private var isLaunchedBefore: Bool {

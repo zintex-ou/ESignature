@@ -125,7 +125,8 @@ struct PasswordView: View {
        
             HStack(spacing: isPad ? 54 : 24) {
                 Group {
-                    if viewModel.bioEnable {
+                    if viewModel.bioEnable && viewModel.isPresent {
+                        
                         Button {
                             viewModel.authenticateWithBiometrics()
                         } label: {

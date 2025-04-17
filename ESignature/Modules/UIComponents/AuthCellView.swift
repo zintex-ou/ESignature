@@ -10,7 +10,7 @@ struct AuthCellView: View {
     let toggleable: Bool
     let hasInfo: Bool
     
-    private let options: [Int] = [1, 5, 10, 20, 60]
+    private let options: [Int] = [3, 5, 10, 20, 60]
 
     var body: some View {
         HStack(spacing: 0) {

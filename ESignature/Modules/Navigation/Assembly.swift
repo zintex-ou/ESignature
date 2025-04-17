@@ -57,7 +57,7 @@ class Assembly {
         return controller
     }
     
-    func makePassword(output: PasswordOutput, isPresent: Bool, onUnlockComplete: (() -> Void)?) -> UIHostingController<some View> {
+    func makePassword(output: PasswordOutput, isPresent: Bool, onUnlockComplete: (() -> Void)?) -> UIHostingController<PasswordView> {
         let passwordView = PasswordView(viewModel: .init(output: output, isPresent: isPresent, onUnlockComplete: onUnlockComplete))
         let controller = UIHostingController(rootView: passwordView)
         return controller
