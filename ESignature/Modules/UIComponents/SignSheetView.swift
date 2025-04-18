@@ -5,7 +5,7 @@ import Combine
 struct SignSheetView: View {
     @EnvironmentObject var viewModel: EditViewModel
     @Environment(\.dismiss) var dismiss
-
+    
     var body: some View {
         ZStack(alignment: .top) {            
             
@@ -34,7 +34,29 @@ struct SignSheetView: View {
                         .frame(height: 38)
                         .background(.c0666EB)
                         .clipShape(RoundedRectangle(cornerRadius: 24))
-                     
+                        .confirmationDialog(
+                            "Choose an option",
+                            isPresented: $viewModel.shouldShowingDialog,
+                            titleVisibility: .hidden
+                        ) {
+                            Button("Draw") {
+                                viewModel.showDraw()
+                            }
+                            
+                            Button("From Gallery") {
+                                viewModel.showGallerySign()
+                            }
+                            
+                            Button("From Files") {
+                                viewModel.showFileSign()
+                            }
+                            
+                            Button("Cancel", role: .cancel) {
+                                
+                            }
+                            
+                        }
+                        
                     }
                 }
                 .padding(.horizontal, 16)
@@ -45,7 +67,7 @@ struct SignSheetView: View {
             }
             .frame(height: 321)
             .padding(.top, 24)
-               
+            
         }
         .onAppear {
             viewModel.fetchSigns()
@@ -85,7 +107,7 @@ struct SignSheetView: View {
                     .padding(.horizontal, 16)
                 }
                     .frame(height: 186)
-                .scrollIndicators(.hidden)
+                    .scrollIndicators(.hidden)
             )
         }
     }
@@ -108,7 +130,7 @@ struct SignSheetView: View {
                 .font(.custom(R.font.outfitRegular, size: 16))
                 .padding(.top, 4)
                 .multilineTextAlignment(.center)
-
+            
             Spacer()
         }
         .padding(.horizontal, 16)
