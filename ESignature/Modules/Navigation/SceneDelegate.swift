@@ -76,13 +76,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func showPaywallIfNeeded() {
-//        if !coordinator.checkPremium() {
-//            if isPad {
-//                coordinator.showPadPaywall()
-//            } else {
-//                coordinator.showPaywall()
-//            }
-//        }
+        if !coordinator.checkPremium() {
+            if isPad {
+                coordinator.showPadPaywall()
+            } else {
+                coordinator.showPaywall()
+            }
+        }
 
         if let shortCutItem {
             _ = handle(shortcutItem: shortCutItem)

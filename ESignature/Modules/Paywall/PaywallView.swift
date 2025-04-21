@@ -47,6 +47,14 @@ struct PaywallView: View {
                             viewModel.selectPaywallProduct(product: product)
                         }
                         .padding(.vertical, 4)
+                        .overlay(alignment: .topTrailing) {
+                            if product.isFreeTrial {
+                                TrialBannerView(title: "\(product.trialDays) days free trial")
+                                    .frame(width: 113, height: 22)
+                                    .padding(.top, -11)
+                                    .padding(.trailing, 8)
+                            }
+                        }
                 }
                                 
                 Button {
