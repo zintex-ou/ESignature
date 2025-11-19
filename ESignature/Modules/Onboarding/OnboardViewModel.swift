@@ -12,12 +12,11 @@ final class OnboardViewModel: ObservableObject {
     
     private var reachability: Reachability?
     @ObservedObject private var remoteConfig = RemoteConfigProvider.shared
-    private let purchaseManager = PurchaseManager.shared
+    let purchaseManager = PurchaseManager.shared
     @Published var cancell = false
     
     @Environment(\.openURL) var openURL
     
-    // MARK: - Published Properties
     @Published var isLoading: Bool = false
         
     @Published var alertTitle: String = ""
@@ -33,8 +32,8 @@ final class OnboardViewModel: ObservableObject {
     ) {
         self.output = output
         self.onComplete = onComplete
-        Task { await fetchPayWall() }
         setupReachability()
+        Task { await fetchPayWall() }
     }
     
     deinit {
@@ -230,27 +229,18 @@ final class OnboardViewModel: ObservableObject {
         }
     }
     
-    private func fetchPayWallProducts(paywall: AdaptyPaywall) async {
-        await MainActor.run {
-            self.isLoading = true
-        }
-        do {
-            let products = try await purchaseManager.fetchPaywallProducts(paywall: paywall)
-            await MainActor.run {
-                weeklyProduct = products.first
-            }
-        } catch {
-            if let error = AdaptyErrorManager.init(error: error).error {
-                showAlert(
-                    title: error.title,
-                    message: error.subTitle
-                )
-            }
-        }
-        await MainActor.run {
-            self.isLoading = false
-        }
-    }
+//    private func fetchPayWallProducts(paywall: AdaptyPaywall) async {
+//        await MainActor.run { self.isLoading = true }
+//        do {
+//            let products = try await purchaseManager.fetchPaywallProducts(paywall: paywall)
+//            await MainActor.run { weeklyProduct = products.first }
+//        } catch {
+//            if let error = AdaptyErrorManager(error: error).error {
+//                showAlert(title: error.title, message: error.subTitle)
+//            }
+//        }
+//        await MainActor.run { self.isLoading = false }
+//    }
 }
 
 
@@ -288,37 +278,41 @@ extension OnboardViewModel {
     
     private func fetchPayWall() async {
         setLoading(true)
-        print("fetchPayWall")
+        
         do {
-            print("do")
-
             let paywall = try await purchaseManager.fetchPaywall()
-            print("paywall")
-
             try await fetchPaywallProducts(paywall: paywall)
-
         } catch {
             if let purchaseError = error as? PurchaisesError {
                 switch purchaseError {
                 case .raw(let title, let subTitle):
-                    print("\(title), \(subTitle)")
+                    showAlert(title: title, message: subTitle)
                 }
+            } else if let adaptyError = AdaptyErrorManager(error: error).error {
+                showAlert(
+                    title: adaptyError.title,
+                    message: adaptyError.subTitle
+                )
             } else {
-                print("Unknown error: \(error.localizedDescription)")
+                showAlert(
+                    title: R.string.localizable.error(),
+                    message: error.localizedDescription
+                )
             }
-
         }
         
         setLoading(false)
     }
     
     private func fetchPaywallProducts(paywall: AdaptyPaywall) async throws {
-        print("fetchPaywallProducts1")
         let products = try await purchaseManager.fetchPaywallProducts(paywall: paywall)
-        print("fetchPaywallProducts2")
-
         await MainActor.run {
-            weeklyProduct = products.first
+            let weekly = products.first {
+                let name = $0.localizedTitle.lowercased()
+                return name.contains("week")
+            }
+            
+            weeklyProduct = weekly ?? products.first
             updateContinueButtonText()
         }
     }

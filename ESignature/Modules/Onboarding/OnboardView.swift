@@ -96,14 +96,38 @@ struct OnboardView: View {
             }
         }
         .alert(isPresented: $viewModel.showAlert) {
-            return Alert(
-                title: Text(viewModel.alertTitle),
-                message: Text(viewModel.alertMessage),
-                dismissButton: .default(Text("OK"), action: {
-                })
-            )
+            if !viewModel.cancell {
+                return Alert(
+                    title: Text(viewModel.alertTitle),
+                    message: Text(viewModel.alertMessage),
+                    dismissButton: .default(
+                        Text(String(localized: "OK"))
+                    ) {
+                        if viewModel.purchaseManager.isPremium {
+                            viewModel.onComplete()
+                        }
+                    }
+                )
+            } else {
+                return Alert(
+                    title: Text(viewModel.alertTitle),
+                    message: Text(viewModel.alertMessage),
+                    primaryButton: .default(
+                        Text(String(localized: "Please try again"))
+                    ) {
+                        Task {
+                            await tapOnContinue {
+                                viewModel.onComplete()
+                            }
+                        }
+                    },
+                    secondaryButton: .cancel(
+                        Text(String(localized: "Cancel"))
+                    ) {}
+                )
+            }
         }
-        .background { 
+        .background {
             Image(isPad ? R.image.onboardBackPad : R.image.onboardBackPhone)
                 .resizable()
                 .scaledToFill()

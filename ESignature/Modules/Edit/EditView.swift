@@ -287,7 +287,7 @@ struct EditView: View {
         
         for pageImagex in 0...(pdfView.document?.pageCount ?? 1) {
             
-            var nextPage = pdfView.document?.page(at: pageImagex)
+            let nextPage = pdfView.document?.page(at: pageImagex)
             nextPage?.addAnnotation(annotation)
             print("pageImagex \(pageImagex)")
             

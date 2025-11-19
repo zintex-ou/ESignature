@@ -34,7 +34,7 @@ class Assembly {
     }
     
     func makeScanner(scanResult: Binding<[UIImage]>) -> UIHostingController<some View> {
-        let scannerView = ScannerView(scanResult: scanResult)
+        let scannerView = ScannerHostView(scanResult: scanResult)
         let controller = UIHostingController(rootView: scannerView)
         return controller
     }

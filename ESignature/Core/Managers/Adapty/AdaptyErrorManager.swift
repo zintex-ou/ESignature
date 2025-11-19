@@ -177,6 +177,21 @@ struct AdaptyErrorManager {
             return .raw(title: R.string.localizable.operationInterrupted(), subTitle: R.string.localizable.thisOperationWasInterruptedByTheSystem())
         case .fetchSubscriptionStatusFailed:
             return .raw(title: R.string.localizable.fetchSubscriptionStatus(), subTitle: R.string.localizable.statusError())
+        case .paymentPendingError:
+            return .raw(
+                title: R.string.localizable.error(),
+                subTitle: R.string.localizable.anUnexpectedErrorOccurred()
+            )
+        case .unknownTransactionId:
+            return .raw(
+                title: R.string.localizable.error(),
+                subTitle: R.string.localizable.anUnexpectedErrorOccurred()
+            )
+        case .unidentifiedUserLogout:
+            return .raw(
+                title: R.string.localizable.error(),
+                subTitle: R.string.localizable.anUnexpectedErrorOccurred()
+            )
         }
     }
 }

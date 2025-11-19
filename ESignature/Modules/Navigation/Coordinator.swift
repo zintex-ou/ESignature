@@ -7,6 +7,8 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
     var navigationController: UINavigationController
     var window: UIWindow!
     
+    private var isPresentingMailComposer = false
+    
     private var isLaunchedBefore: Bool {
         get { UserDefaults.standard.bool(forKey: AppConstants.isLauchedBefore) }
         set { UserDefaults.standard.set(newValue, forKey: AppConstants.isLauchedBefore) }
@@ -23,17 +25,27 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
     }
     
     func start() {
+        let launchController = UIHostingController(rootView: LaunchScreenView())
+        
+        self.navigationController.setViewControllers([launchController], animated: true)
+        self.window?.rootViewController = self.navigationController
+        self.window?.makeKeyAndVisible()
+        
         Task {
             await self.startFetching()
-            await MainActor.run {
+            
+                  
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                
                 guard isLaunchedBefore else {
                     self.startOnboard()
                     return
                 }
-                self.startMain()
+                
+                startMain()
             }
         }
-        
     }
     
     func startFetching() async {
@@ -97,6 +109,10 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
     }
     
     func openContactUs() {
+        if isPresentingMailComposer {
+            return
+        }
+        
         guard MFMailComposeViewController.canSendMail() else {
             let email = AppConstants.URLs.emailLink
             guard let url = URL(string: "mailto:\(email.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") else {
@@ -118,8 +134,10 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
         mailComposeVC.setMessageBody(R.string.localizable.pleaseDescribeYourIssueHere(), isHTML: false)
         mailComposeVC.mailComposeDelegate = self
         
+        isPresentingMailComposer = true
         presentMailComposer(mailComposeVC)
     }
+
     
     private func showEmailErrorAlert() {
         let alert = UIAlertController(
@@ -150,16 +168,11 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
     private func presentMailComposer(_ controller: MFMailComposeViewController) {
         guard let topVC = UIApplication.getTopViewController() else {
             print("Error: Unable to get top view controller")
+            isPresentingMailComposer = false
             return
         }
         
-        if topVC.presentedViewController == nil {
-            topVC.present(controller, animated: true)
-        } else {
-            topVC.dismiss(animated: true) {
-                topVC.present(controller, animated: true)
-            }
-        }
+        topVC.present(controller, animated: true)
     }
     
     private func presentAlert(_ alert: UIAlertController) {
@@ -168,6 +181,15 @@ final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
             return
         }
         topVC.present(alert, animated: true)
+    }
+    
+    func mailComposeController(
+        _ controller: MFMailComposeViewController,
+        didFinishWith result: MFMailComposeResult,
+        error: Error?
+    ) {
+        isPresentingMailComposer = false
+        controller.dismiss(animated: true)
     }
     
 }

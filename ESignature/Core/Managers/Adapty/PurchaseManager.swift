@@ -32,7 +32,7 @@ final class PurchaseManager: ObservableObject {
         }
     }
     
-    private func fetchProfile() async {
+    func fetchProfile() async {
         do {
             let profile = try await Adapty.getProfile()
             saveExpiresPurchasesToStorage(profile: profile)
@@ -47,7 +47,9 @@ final class PurchaseManager: ObservableObject {
     
     private func saveExpiresPurchasesToStorage(profile: AdaptyProfile?) {
         guard let profile else { return }
-        keychainManager.purchasesExpiresAt = profile.accessLevels["premium"]?.expiresAt
+        if let active = profile.accessLevels.values.first(where: { $0.isActive }) {
+            keychainManager.purchasesExpiresAt = active.expiresAt
+        }
     }
     
     private func configureShortCut() {

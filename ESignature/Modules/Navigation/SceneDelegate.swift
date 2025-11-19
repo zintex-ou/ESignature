@@ -44,34 +44,39 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        if UserDefaults.standard.bool(forKey: AppConstants.isLauchedBefore) {
-            coordinator.addShortcutActionMenu()
-            print("ggggg")
-            
-            if keychainManager.hasPassword ?? false {
-                if let topViewController = coordinator.navigationController.topViewController,
-                   topViewController is UIHostingController<PasswordView> {
-                    return
-                }
-                
-                if let lastLockDate = keychainManager.timeLock,
-                   let gracePeriod = keychainManager.gracePeriod {
-                    let timeElapsed = Date().timeIntervalSince(lastLockDate)
-                    if timeElapsed < gracePeriod {
-                        showPaywallIfNeeded()
+        
+        Task {
+            await PurchaseManager.shared.fetchProfile()
+            await MainActor.run {
+                if UserDefaults.standard.bool(forKey: AppConstants.isLauchedBefore) {
+                    coordinator.addShortcutActionMenu()
+                    
+                    if keychainManager.hasPassword ?? false {
+                        if let topViewController = coordinator.navigationController.topViewController,
+                           topViewController is UIHostingController<PasswordView> {
+                            return
+                        }
+                        
+                        if let lastLockDate = keychainManager.timeLock,
+                           let gracePeriod = keychainManager.gracePeriod {
+                            let timeElapsed = Date().timeIntervalSince(lastLockDate)
+                            if timeElapsed < gracePeriod {
+                                showPaywallIfNeeded()
+                                return
+                            }
+                        }
+                        
+                        coordinator.showPasswordPresent(onUnlockComplete: { [weak self] in
+                            self?.keychainManager.timeLock = Date()
+                            self?.showPaywallIfNeeded()
+                        })
+                        
                         return
                     }
+                    
+                    showPaywallIfNeeded()
                 }
-                
-                coordinator.showPasswordPresent(onUnlockComplete: { [weak self] in
-                    self?.keychainManager.timeLock = Date()
-                    self?.showPaywallIfNeeded()
-                })
-
-                return
             }
-            
-            showPaywallIfNeeded()
         }
     }
 

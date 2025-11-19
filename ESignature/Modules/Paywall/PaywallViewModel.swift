@@ -270,11 +270,11 @@ extension PaywallViewModel {
     }
     
     private func showAlert(title: String, message: String) {
-        
+        DispatchQueue.main.async {
             self.alertTitle = title
             self.alertMessage = message
             self.showAlert = true
-        
+        }
     }
     
     private func handleError(_ error: Error) {

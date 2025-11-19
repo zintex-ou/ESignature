@@ -2,7 +2,7 @@
 import Foundation
 
 struct PurchaiseProductModel: Hashable, Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let productId: String
     let nameProduct: String
     let price: Float
