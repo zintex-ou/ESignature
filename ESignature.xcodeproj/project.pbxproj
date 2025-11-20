@@ -371,7 +371,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ESignature/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = eSignuture;
+				INFOPLIST_KEY_CFBundleDisplayName = eSignature;
 				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera to scan documents that would be signed";
 				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder to extract pdf files for adding E -signatures and to save files";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your app documents";
@@ -414,7 +414,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ESignature/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = eSignuture;
+				INFOPLIST_KEY_CFBundleDisplayName = eSignature;
 				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera to scan documents that would be signed";
 				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder to extract pdf files for adding E -signatures and to save files";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your app documents";
