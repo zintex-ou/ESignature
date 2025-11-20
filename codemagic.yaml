@@ -1,0 +1,48 @@
+workflows:
+  ios-native-workflow:
+    name: iOS Native
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+
+    integrations:
+      app_store_connect: sign4_codemagic
+
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: pdfsignature.electronic.doc.com
+      vars:
+        XCODE_PROJECT: "ESignature.xcodeproj"
+        XCODE_SCHEME:  "ESignature"
+        APP_STORE_APPLE_ID: "6744109118"
+      xcode: latest
+      cocoapods: default
+
+    scripts:
+      - name: Set up provisioning profiles
+        script: |
+          # If you enabled "Automatic code signing" in the UI,
+          # CodeMagic will fetch / create the profile before this step.
+          xcode-project use-profiles \
+            --project "$CM_BUILD_DIR/$XCODE_PROJECT"
+
+      - name: Build ipa for distribution
+        script: |
+          cd "$CM_BUILD_DIR"
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme  "$XCODE_SCHEME"
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      email:
+        recipients: [1plinerverlinegwh7@gmail.com]
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_app_store: false
