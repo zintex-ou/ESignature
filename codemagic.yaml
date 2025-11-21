@@ -32,7 +32,8 @@ workflows:
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme  "$XCODE_SCHEME" \
-            --archive-flags "-skipPackagePluginValidation"
+            --archive-flags="-skipPackagePluginValidation -skipMacroValidation" \
+            --export-flags="-skipPackagePluginValidation -skipMacroValidation"
 
     artifacts:
       - build/ios/ipa/*.ipa
