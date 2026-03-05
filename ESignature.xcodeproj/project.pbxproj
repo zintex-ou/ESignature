@@ -23,6 +23,9 @@
 		AED5C6542DA3A92400DBE969 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6532DA3A92400DBE969 /* Reachability */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+																																						/* End PBXBuildRule section */
+
 /* Begin PBXFileReference section */
 		AEAD51CA2D8D3E2A00BC2071 /* ESignature.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ESignature.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -274,7 +277,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -338,7 +341,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -372,6 +375,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ESignature/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = eSignature;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera to scan documents that would be signed";
 				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder to extract pdf files for adding E -signatures and to save files";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your app documents";
@@ -415,6 +419,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ESignature/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = eSignature;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "App Would Like to Access the Camera to scan documents that would be signed";
 				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "App would like to access the documents folder to extract pdf files for adding E -signatures and to save files";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app use Face ID to protect your app documents";
