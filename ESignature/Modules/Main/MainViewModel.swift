@@ -1,4 +1,5 @@
 import Foundation
+import PrintingKit
 import _PhotosUI_SwiftUI
 import CoreData
 import PDFKit
@@ -21,9 +22,7 @@ final class MainViewModel: NSObject, ObservableObject {
     
     @Published var shouldRenameSheet: Bool = false
     @Published var shouldAddImage: Bool = false
-    
     @Published var shouldDeleteAction: Bool = false
-    
     @Published var openAllDocs: Bool = false
     
     @Published var documents: [DocumentEntity]?
@@ -31,8 +30,8 @@ final class MainViewModel: NSObject, ObservableObject {
     @Published var selectedDocumentID: String?
     
     @Published var scannedImages: [UIImage] = []
-
     @Published var photoItem: PhotosPickerItem? = nil
+    @Published var documentToDelete: DocumentEntity?
     
     private let isPad = UIDevice.current.userInterfaceIdiom == .pad
         
@@ -200,7 +199,7 @@ final class MainViewModel: NSObject, ObservableObject {
     
     func fetchDocuments() {
         documents = coreDataManager.fetchDocuments()
-        signedDocuments = documents?.filter { $0.isSigned == true}
+        signedDocuments = documents?.filter { $0.isSigned == true }
     }
     
     func deleteDocument(docName: String) {
@@ -222,7 +221,6 @@ final class MainViewModel: NSObject, ObservableObject {
     }
     
     func renameDocument(documentID: String, newName: String) {
-        
         guard let documentEntity = coreDataManager.loadDocumentItem(with: documentID) else {
             print("Document with ID \(documentID) not found in Core Data")
             return
@@ -232,6 +230,7 @@ final class MainViewModel: NSObject, ObservableObject {
             print("Document URL is missing")
             return
         }
+        
         let oldAbsoluteURL = fileManagerService.getAbsoluteURL(from: docURLString)
         
         do {
@@ -258,29 +257,26 @@ final class MainViewModel: NSObject, ObservableObject {
             }
             
             let pdfDocument = image.toPDFDocument()
-            
             savePDF(pdfDocument)
             loadSavedPDFs()
             
-            print("PDF sucsess sreated")
-            
+            print("PDF success created")
         } catch {
-            print("Consert error: \(error.localizedDescription)")
+            print("Convert error: \(error.localizedDescription)")
         }
     }
     
     func checkPremium() -> Bool {
-        return PurchaseManager.shared.isPremium
+        PurchaseManager.shared.isPremium
     }
     
     func checkTrialSubscription() -> Bool {
 #if DEBUG
         return true
 #else
-    if !PurchaseManager.shared.isPremium {
+        if !PurchaseManager.shared.isPremium {
             if keychainManager.hasUsedFreeAccess == true {
                 return false
-                
             } else {
                 keychainManager.hasUsedFreeAccess = true
                 return true
@@ -289,5 +285,132 @@ final class MainViewModel: NSObject, ObservableObject {
             return true
         }
 #endif
+    }
+}
+
+extension MainViewModel {
+    
+    func shareDocument(at path: String?) {
+        Task {
+            guard let pdfURL = await preparePDFForOutput(from: path) else {
+                print("Failed to prepare PDF for sharing")
+                return
+            }
+            
+            await MainActor.run {
+                UIApplication.shared.shareFile(file: pdfURL)
+            }
+        }
+    }
+    
+    func printDocument(at path: String?) {
+        Task {
+            guard let pdfURL = await preparePDFForOutput(from: path) else {
+                print("Failed to prepare PDF for printing")
+                return
+            }
+            
+            await MainActor.run {
+                do {
+                    try Printer.shared.print(.pdfFile(at: pdfURL))
+                } catch {
+                    print("Can't print file: \(pdfURL), error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func deleteDocument(_ doc: DocumentEntity?) {
+        guard let doc else { return }
+        
+        let documentPath = doc.url
+        
+        if let documentPath {
+            let absURL = fileManagerService.getAbsoluteURL(from: documentPath)
+            do {
+                try fileManagerService.deleteFile(at: absURL)
+                print("Deleted file at: \(absURL)")
+            } catch {
+                print("Failed to delete file: \(error.localizedDescription)")
+            }
+        }
+        
+        coreDataManager.deleteDocument(doc)
+        fetchDocuments()
+    }
+    
+    func shareDocument(_ doc: DocumentEntity?) {
+        shareDocument(at: doc?.url)
+    }
+    
+    func printDocument(_ doc: DocumentEntity?) {
+        printDocument(at: doc?.url)
+    }
+    
+    private func preparePDFForOutput(from path: String?) async -> URL? {
+        guard let path, !path.isEmpty else {
+            print("Invalid file path")
+            return nil
+        }
+        
+        let sourceURL = fileManagerService.getAbsoluteURL(from: path)
+        let fileExtension = sourceURL.pathExtension.lowercased()
+        
+        if fileExtension == "pdf" {
+            return sourceURL
+        }
+        
+        if let pdfDocument = PDFDocument(url: sourceURL), pdfDocument.pageCount > 0 {
+            return sourceURL
+        }
+        
+        if let image = loadImageForPDFConversion(from: sourceURL) {
+            return saveImageAsTemporaryPDF(image)
+        }
+        
+        if let data = try? Data(contentsOf: sourceURL) {
+            if let pdfDocument = PDFDocument(data: data), pdfDocument.pageCount > 0 {
+                return sourceURL
+            }
+            
+            if let image = UIImage(data: data) {
+                return saveImageAsTemporaryPDF(image.fixedOrientation())
+            }
+        }
+        
+        print("Unsupported file type for PDF conversion: \(sourceURL)")
+        return nil
+    }
+    
+    private func loadImageForPDFConversion(from sourceURL: URL) -> UIImage? {
+        if let image = UIImage(contentsOfFile: sourceURL.path) {
+            return image.fixedOrientation()
+        }
+        
+        if let data = try? Data(contentsOf: sourceURL),
+           let image = UIImage(data: data) {
+            return image.fixedOrientation()
+        }
+        
+        return nil
+    }
+    
+    private func saveImageAsTemporaryPDF(_ image: UIImage) -> URL? {
+        guard let pdfData = image.fixedOrientation().toPDFData() else {
+            print("Failed to convert image to PDF data")
+            return nil
+        }
+        
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("pdf")
+        
+        do {
+            try pdfData.write(to: tempURL, options: .atomic)
+            return tempURL
+        } catch {
+            print("Failed to save temporary PDF: \(error.localizedDescription)")
+            return nil
+        }
     }
 }

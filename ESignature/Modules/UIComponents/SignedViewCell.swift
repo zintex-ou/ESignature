@@ -1,4 +1,3 @@
-
 import SwiftUI
 import PrintingKit
 
@@ -8,13 +7,12 @@ struct SignedViewCell: View {
     let image: Data?
     let isSigned: Bool
     let date: Date?
-    let id: String?
-    let path: String?
     
-    @ObservedObject var viewModel: MainViewModel
-    
-    @State private var isShareSheetPresented = false
-    @State private var sharedPDFData: Data?
+    let onRename: () -> Void
+    let onShare: () -> Void
+    let onPrint: () -> Void
+    let onDelete: () -> Void
+    let onTap: () -> Void
     
     private enum Constants {
         static var signedText = R.string.localizable.signed
@@ -36,8 +34,7 @@ struct SignedViewCell: View {
                     .font(.custom(R.font.outfitSemiBold, size: 16))
                     .foregroundStyle(.c191919)
                 
-                HStack() {
-                    
+                HStack {
                     Text(localizedFormattedDate(from: date ?? Date()))
                         .font(.custom(R.font.outfitRegular, size: 14))
                         .foregroundStyle(.c7C7C7C)
@@ -55,27 +52,19 @@ struct SignedViewCell: View {
             Spacer()
             
             Menu {
-                Button(action: {
-                    renameAction()
-                }) {
+                Button(action: onRename) {
                     Label(R.string.localizable.rename(), image: "renameIcon")
                 }
                 
-                Button(action: {
-                    shareAction()
-                }) {
+                Button(action: onShare) {
                     Label(R.string.localizable.share(), image: "shareIcon")
                 }
                 
-                Button(action: {
-                    printAction()
-                    }) {
-                        Label(R.string.localizable.print(), image: "printIcon")
-                    }
+                Button(action: onPrint) {
+                    Label(R.string.localizable.print(), image: "printIcon")
+                }
                 
-                Button(role: .destructive, action: {
-                    showDeleteDiolog()
-                }) {
+                Button(role: .destructive, action: onDelete) {
                     Label(R.string.localizable.delete(), image: "deleteIcon")
                 }
             } label: {
@@ -83,67 +72,13 @@ struct SignedViewCell: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 40, height: 40)
-                    .padding(.trailing, 8)
-            }
-            .confirmationDialog(
-                R.string.localizable.delete_document_warning(),
-                isPresented: $viewModel.shouldDeleteAction,
-                titleVisibility: .visible
-            ) {
-                Button(R.string.localizable.delete(), role: .destructive) {
-                    deleteAction()
-                }
-    
-                Button(R.string.localizable.cancel(), role: .cancel) {
-    
-                }
             }
         }
+        .padding(.trailing, 8)
         .frame(height: 46)
-        .sheet(isPresented: $isShareSheetPresented) {
-            if let pdfData = sharedPDFData {
-                ShareSheet(activityItems: [pdfData])
-            } else {
-                Text("Cant load PDF")
-            }
-        }
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
     }
-    
-    private func renameAction() {
-         viewModel.shouldRenameSheet = true
-         viewModel.selectedDocumentID = id
-     }
-     
-    private func shareAction() {
-        guard let path = path else {
-            print("Not true file path")
-            return
-        }
-        let absURL = FileManagerService.shared.getAbsoluteURL(from: path)
-
-        UIApplication.shared.shareFile(file: absURL)
-    }
-
-     private func printAction() {
-         guard let path = path, let fileURL = URL(string: path) else {
-             print("Invalid file path")
-             return
-         }
-         do {
-             try Printer.shared.print(.pdfFile(at: fileURL))
-         } catch {
-             print("Can't print file: \(fileURL), error: \(error.localizedDescription)")
-         }
-     }
-    
-    private func showDeleteDiolog() {
-        viewModel.shouldDeleteAction = true
-    }
-     
-     private func deleteAction() {
-         viewModel.deleteDocument(docName: name ?? "")
-         viewModel.fetchDocuments()
-     }
     
     func localizedFormattedDate(from date: Date, locale: Locale = Locale.current) -> String {
         let languageCode = locale.languageCode ?? "en"

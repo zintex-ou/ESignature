@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A89E0AD5EB1148C1851DACE1 /* README.md */ = {isa = PBXBuildFile; fileRef = 8A7F168293C3446E811DACE1; };
 		AED5C6022DA2D53C00DBE969 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6012DA2D53C00DBE969 /* Lottie */; };
 		AED5C6052DA2D58000DBE969 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6042DA2D57F00DBE969 /* KeychainAccess */; };
 		AED5C6082DA2D58900DBE969 /* Alderis in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6072DA2D58900DBE969 /* Alderis */; };
@@ -23,10 +24,8 @@
 		AED5C6542DA3A92400DBE969 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = AED5C6532DA3A92400DBE969 /* Reachability */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildRule section */
-																																						/* End PBXBuildRule section */
-
 /* Begin PBXFileReference section */
+		8A7F168293C3446E811DACE1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AEAD51CA2D8D3E2A00BC2071 /* ESignature.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ESignature.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -87,6 +86,7 @@
 		AEAD51CB2D8D3E2A00BC2071 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				8A7F168293C3446E811DACE1 /* README.md */,
 				AEAD51CA2D8D3E2A00BC2071 /* ESignature.app */,
 			);
 			name = Products;
@@ -185,11 +185,13 @@
 		};
 /* End PBXProject section */
 
+
 /* Begin PBXResourcesBuildPhase section */
 		AEAD51C82D8D3E2A00BC2071 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A89E0AD5EB1148C1851DACE1 /* README.md */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

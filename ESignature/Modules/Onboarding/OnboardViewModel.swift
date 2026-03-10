@@ -18,7 +18,7 @@ final class OnboardViewModel: ObservableObject {
     @Environment(\.openURL) var openURL
     
     @Published var isLoading: Bool = false
-        
+    
     @Published var alertTitle: String = ""
     @Published var alertMessage: String = ""
     @Published var showAlert: Bool = false
@@ -33,7 +33,9 @@ final class OnboardViewModel: ObservableObject {
         self.output = output
         self.onComplete = onComplete
         setupReachability()
-        Task { await fetchPayWall() }
+        Task {
+            await fetchPayWall()
+        }
     }
     
     deinit {
@@ -42,6 +44,10 @@ final class OnboardViewModel: ObservableObject {
     
     func dissmis() {
         output?.dissmis()
+    }
+    
+    private var hasFreeTrial: Bool {
+        weeklyProduct?.subscriptionOffer?.offerType == .introductory
     }
     
     func openPrivacyPolicy() {
@@ -57,25 +63,31 @@ final class OnboardViewModel: ObservableObject {
     }
     
     func requestReview() {
-            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                SKStoreReviewController.requestReview(in: scene)
-            }
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            SKStoreReviewController.requestReview(in: scene)
         }
-    
-    func getSubtitle() -> LocalizedStringResource {
-        return "\(R.string.localizable.startWith3DayTrialThen()) \(priceText())."
-        
     }
     
+    func getSubtitle() -> LocalizedStringResource {
+        if hasFreeTrial {
+            return "\(R.string.localizable.startWith3DayTrialThen()) \(priceText())."
+        } else {
+            return "\(R.string.localizable.subscribeFor()) \(priceText())."
+        }
+    }
     func descText() -> String {
-        let price = priceText()
-     
-        return "\(R.string.localizable.signShareAddStampsWatermarks()) \(String(describing: weeklyProduct?.currencySymbol ?? ""))\(String(describing: weeklyProduct?.price ?? 6.99)) / \(R.string.localizable.week()) \(R.string.localizable.with3DayFreeTrial())"
-            }
-    
+        let currency = weeklyProduct?.currencySymbol ?? "$"
+        let price = String(format: "%.2f", NSDecimalNumber(decimal: weeklyProduct?.price ?? 6.99).floatValue)
+        let period = R.string.localizable.week()
+        
+        if hasFreeTrial {
+            return "\(R.string.localizable.signShareAddStampsWatermarks()) \(currency)\(price) / \(period) \(R.string.localizable.with3DayFreeTrial())"
+        } else {
+            return "\(R.string.localizable.signShareAddStampsWatermarks()) \(currency)\(price) / \(period)"
+        }
+    }
     
     private func priceText() -> LocalizedStringResource {
-
         guard let adaptyProduct = weeklyProduct,
               let currency = adaptyProduct.currencySymbol else {
             return "$6.99/\(R.string.localizable.week())"
@@ -84,17 +96,13 @@ final class OnboardViewModel: ObservableObject {
         let price = String(format: "%.2f", NSDecimalNumber(decimal: adaptyProduct.price).floatValue)
         let period = !adaptyProduct.localizedDescription.isEmpty
             ? NSLocalizedString(adaptyProduct.localizedDescription, comment: "")
-        : NSLocalizedString(R.string.localizable.week(), comment: "")
+            : NSLocalizedString(R.string.localizable.week(), comment: "")
 
-        if let introductoryDiscount = adaptyProduct.subscriptionOffer {
-            return "\(currency)\(price)/\(period)"
-        } else {
-            return "\(currency)\(price)/\(period)"
-        }
+        return "\(currency)\(price)/\(period)"
     }
     
     // MARK: - makePurchase
-
+    
     func makePurchase(completion: @escaping () -> Void) async {
         guard isNetworkAvailable() else {
             showNetworkError()
@@ -129,7 +137,7 @@ final class OnboardViewModel: ObservableObject {
             case .pending:
                 break
             case .success:
-                handlePurchaseSuccess(completion: completion)
+                handlePurchaseSuccess()
             }
         } catch {
             await handlePurchaseError(error)
@@ -166,7 +174,7 @@ final class OnboardViewModel: ObservableObject {
             title: "Ooops...",
             message:
                 "\(R.string.localizable.somethingWentWrong())\n\(R.string.localizable.pleaseTryAgain())"
-
+            
         )
     }
     
@@ -176,8 +184,7 @@ final class OnboardViewModel: ObservableObject {
     }
     
     @MainActor
-    private func handlePurchaseSuccess(completion: () -> Void) {
-        completion()
+    private func handlePurchaseSuccess() {
         onComplete()
     }
     
@@ -210,17 +217,20 @@ final class OnboardViewModel: ObservableObject {
     }
     
     private func formattedButtonText(for product: AdaptyPaywallProduct) -> String {
-        guard let currency = product.currencySymbol else { return "\(R.string.localizable.subscribeFor()) $6.99/\(R.string.localizable.week())" }
-        let price = NSDecimalNumber(decimal: product.price).stringValue
+        guard let currency = product.currencySymbol else {
+            return "\(R.string.localizable.subscribeFor()) $6.99/\(R.string.localizable.week())"
+        }
         
+        let price = NSDecimalNumber(decimal: product.price).stringValue
         let period = product.localizedSubscriptionPeriod ?? R.string.localizable.week()
-        if let intro = product.subscriptionOffer {
-            return "\(R.string.localizable.withA()) \(intro.subscriptionPeriod.numberOfUnits) \(R.string.localizable.dayTrialThen()) \(price) \(currency)/\(period)"
+        
+        if hasFreeTrial, let intro = product.subscriptionOffer {
+            return "\(R.string.localizable.withA()) \(intro.subscriptionPeriod.numberOfUnits) \(R.string.localizable.dayTrialThen()) \(currency)\(price)/\(period)"
         } else {
             return "\(R.string.localizable.subscribeFor()) \(currency)\(price)/\(period)"
         }
     }
-
+    
     private func showAlert(title: String, message: String) {
         DispatchQueue.main.async {
             self.alertTitle = title
@@ -228,25 +238,11 @@ final class OnboardViewModel: ObservableObject {
             self.showAlert = true
         }
     }
-    
-//    private func fetchPayWallProducts(paywall: AdaptyPaywall) async {
-//        await MainActor.run { self.isLoading = true }
-//        do {
-//            let products = try await purchaseManager.fetchPaywallProducts(paywall: paywall)
-//            await MainActor.run { weeklyProduct = products.first }
-//        } catch {
-//            if let error = AdaptyErrorManager(error: error).error {
-//                showAlert(title: error.title, message: error.subTitle)
-//            }
-//        }
-//        await MainActor.run { self.isLoading = false }
-//    }
 }
 
 
 // MARK: - Purchase & Network Operations
 extension OnboardViewModel {
-  
     private func restorePurchases(completion: @escaping () -> Void) async {
         guard reachability?.connection != .unavailable else {
             showNetworkError()
@@ -330,5 +326,3 @@ extension OnboardViewModel {
         }
     }
 }
-
-

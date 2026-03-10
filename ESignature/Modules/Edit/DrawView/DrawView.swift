@@ -31,6 +31,9 @@ struct DrawView: View {
             }
         }
         .background(Color(.cF7F7F7))
+        .onAppear {
+            viewModel.lines.removeAll()
+        }
     }
     
     @ViewBuilder
@@ -51,7 +54,6 @@ struct DrawView: View {
     
     @ViewBuilder
     private var canvas: some View {
-        
         GeometryReader { geometry in
             RoundedRectangle(cornerRadius: 23.8)
                 .fill(.white)

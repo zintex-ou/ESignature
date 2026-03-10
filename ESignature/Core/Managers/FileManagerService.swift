@@ -106,8 +106,12 @@ class FileManagerService {
         return documentsDirectory.appendingPathComponent(fileName)
     }
     
-    func getAbsoluteURL(from relativePath: String) -> URL {
-        return documentsDirectory.appendingPathComponent(relativePath)
+    func getAbsoluteURL(from path: String) -> URL {
+        if path.hasPrefix("/") {
+            return URL(fileURLWithPath: path)
+        } else {
+            return documentsDirectory.appendingPathComponent(path)
+        }
     }
     
     func copyFile(from sourceURL: URL, to destinationURL: URL) throws {

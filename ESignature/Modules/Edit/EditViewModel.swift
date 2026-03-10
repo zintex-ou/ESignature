@@ -17,7 +17,6 @@ final class EditViewModel: ObservableObject {
     @Published var shouldShowSignSheet: Bool = false
     @Published var shouldShowWatermarkSheet: Bool = false
     
-    
     @Published var shouldShowGalleryStamp: Bool = false
     @Published var shouldShowFileStamp: Bool = false
     @Published var shouldShowGallerySign: Bool = false
@@ -307,6 +306,11 @@ final class EditViewModel: ObservableObject {
                 self.coreDataManager.updatePreviewOfDocument(with: id, isSigned: true, preview: previewData)
             }
         }
+    }
+    
+    func clearOverlaySelection() {
+        selectedOverlay = nil
+        selectedStampIndex = nil
     }
     
     func pop() {
