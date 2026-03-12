@@ -134,6 +134,13 @@ struct OnboardView: View {
                 .ignoresSafeArea(.all)
                 .scaleEffect(1.05)
         }
+        .overlay {
+            ZStack {
+                if viewModel.isLoading {
+                    CustomLoaderView()
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -204,22 +211,25 @@ struct OnboardView: View {
                     viewModel.onComplete()
                 } label: {
                     if viewModel.reviewStatus() {
-                        Image(systemName: "xmark")
+                        Image(.xmarkCloser)
                             .resizable()
                             .foregroundColor(.white)
                             .opacity(0.5)
-                            .frame(width: 16, height: 16)
+                            .frame(width: 40, height: 40)
                         
                     } else {
-                        Image(systemName: "xmark")
+                        Image(.xmarkCloser)
                             .resizable()
                             .foregroundColor(.white)
                             .opacity(closeIsVisible ? 0.5 : 0)
-                            .animation(.easeInOut(duration: 5), value: closeIsVisible)
                             .onAppear {
-                                closeIsVisible = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                    withAnimation(.easeInOut(duration: 1)) {
+                                        closeIsVisible = true
+                                    }
+                                }
                             }
-                            .frame(width: 16, height: 16)
+                            .frame(width: 40, height: 40)
                     }
                 }
                 Spacer()
@@ -231,6 +241,7 @@ struct OnboardView: View {
                     .font(.custom(R.font.outfitRegular, size: 16))
                     .foregroundColor(.white)
                     .opacity(0.5)
+                    .frame(height: 40)
                     .onTapGesture {
                         viewModel.tapOnRestore {
                             viewModel.dissmis()
@@ -239,7 +250,6 @@ struct OnboardView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.top, 16)
         .zIndex(1)
     }
     

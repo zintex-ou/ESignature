@@ -11,9 +11,9 @@ final class PaywallViewModel: ObservableObject {
     private var reachability: Reachability?
     
     @Published var cancell = false
-        
+    
     @Published var isLoading: Bool = false
-        
+    
     @Published var alertTitle: String = ""
     @Published var alertMessage: String = ""
     @Published var showAlert: Bool = false
@@ -36,8 +36,8 @@ final class PaywallViewModel: ObservableObject {
         self.reachability = try? Reachability()
         self.paywallProducts = ProductFactory.createDefaultProducts()
         Task {
-              await fetchPayWall()
-          }
+            await fetchPayWall()
+        }
     }
     
     func dissmis() {
@@ -119,15 +119,15 @@ extension PaywallViewModel {
     }
     
     func descText(adaptyProduct: PurchaiseProductModel) -> String {
-            
-            let price = String(describing: adaptyProduct.price)
-            let duration = adaptyProduct.timePeriod
-            
-            if !adaptyProduct.isFreeTrial {
-                return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration)"
-            } else {
-                return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration) \(R.string.localizable.with3DayFreeTrial())"
-            }
+        
+        let price = String(describing: adaptyProduct.price)
+        let duration = adaptyProduct.timePeriod
+        
+        if !adaptyProduct.isFreeTrial {
+            return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration)"
+        } else {
+            return "\(R.string.localizable.signShareAddStampsWatermarks()) \(adaptyProduct.currency)\(price) / \(duration) \(R.string.localizable.with3DayFreeTrial())"
+        }
     }
     
     private func showNetworkError() {
@@ -164,7 +164,7 @@ extension PaywallViewModel {
         
         await setLoading(false)
     }
-
+    
     
     func makePurchase(completion: @escaping () -> Void) async {
         print("makePurchase")
@@ -172,21 +172,21 @@ extension PaywallViewModel {
             showNetworkError()
             return
         }
-
+        
         guard let selectedProduct,
               let selectedAdaptyProduct = adaptyProducts
-                  .first(where: { $0.vendorProductId == selectedProduct.productId }) else {
+            .first(where: { $0.vendorProductId == selectedProduct.productId }) else {
             showGenericError()
             return
         }
-
+        
         await MainActor.run {
             self.isLoading = true
         }
-
+        
         do {
             let result = try await purchaseManager.makePurchase(product: selectedAdaptyProduct)
-
+            
             switch result {
             case .userCancelled:
                 if !remoteConfig.isReview {
@@ -234,12 +234,12 @@ extension PaywallViewModel {
                 }
             }
         }
-
+        
         await MainActor.run {
             self.isLoading = false
         }
     }
-
+    
     private func restorePurchases(completion: @escaping () -> Void) async {
         guard reachability?.connection != .unavailable else {
             showNetworkError()
@@ -306,6 +306,3 @@ extension PaywallViewModel {
             )) as Decimal
     }
 }
-
-
-

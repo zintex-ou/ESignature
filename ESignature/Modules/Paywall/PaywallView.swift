@@ -17,14 +17,6 @@ struct PaywallView: View {
             
             VStack {
                 Spacer()
-                if viewModel.isLoading {
-                    CustomLoaderView()
-                }
-                Spacer()
-            }
-            
-            VStack {
-                Spacer()
                 
                 LottieView(animation: .named("paywallAnimation"))
                     .looping()
@@ -89,6 +81,13 @@ struct PaywallView: View {
                 .ignoresSafeArea(.all)
                 .scaleEffect(1.05)
         }
+        .overlay {
+            ZStack {
+                if viewModel.isLoading {
+                    CustomLoaderView()
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -144,59 +143,51 @@ struct PaywallView: View {
     
     @ViewBuilder
     private var navBar: some View {
-            ZStack {
-                HStack {
-                    Button {
-                        viewModel.dissmis()
-                    } label: {
-                        if viewModel.reviewStatus() {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .foregroundColor(.white)
-                                .opacity(0.5)
-                                .frame(width: 16, height: 16)
-                            
-                        } else {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .foregroundColor(.white)
-                                .opacity(closeIsVisible ? 0.5 : 0)
-                                .animation(.easeInOut(duration: 5), value: closeIsVisible)
-                                .onAppear {
-                                    closeIsVisible = true
+        ZStack {
+            HStack {
+                Button {
+                    viewModel.dissmis()
+                } label: {
+                    if viewModel.reviewStatus() {
+                        Image(.xmarkCloser)
+                            .resizable()
+                            .foregroundColor(.white)
+                            .opacity(0.5)
+                            .frame(width: 40, height: 40)
+                        
+                    } else {
+                        Image(.xmarkCloser)
+                            .resizable()
+                            .foregroundColor(.white)
+                            .opacity(closeIsVisible ? 0.5 : 0)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                    withAnimation(.easeInOut(duration: 1)) {
+                                        closeIsVisible = true
+                                    }
                                 }
-                                .frame(width: 16, height: 16)
+                            }
+                            .frame(width: 40, height: 40)
+                    }
+                }
+                Spacer()
+            }
+  
+            HStack {
+                Spacer()
+                Text(R.string.localizable.restore())
+                    .font(.custom(R.font.outfitRegular, size: 16))
+                    .foregroundColor(.white)
+                    .opacity(0.5)
+                    .frame(height: 40)
+                    .onTapGesture {
+                        viewModel.tapOnRestore {
+                            viewModel.dissmis()
                         }
                     }
-                    Spacer()
-                }
-               
-                HStack {
-                    
-                    Spacer()
-                
-                    Text(R.string.localizable.restore())
-                        .font(.custom(R.font.outfitRegular, size: 16))
-                        .foregroundColor(.white)
-                        .opacity(0.5)
-                        .onTapGesture {
-                            viewModel.tapOnRestore {
-                                viewModel.dissmis()
-                            }
-                        }
-                }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
-            
-        .zIndex(1)
-        .alert(isPresented: $viewModel.showAlert) {
-            return Alert(
-                title: Text(viewModel.alertTitle),
-                message: Text(viewModel.alertMessage),
-                dismissButton: .default(Text("OK"), action: {
-                })
-            )
         }
+        .padding(.horizontal, 16)
+        .zIndex(1)
     }
 }

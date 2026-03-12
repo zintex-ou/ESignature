@@ -25,9 +25,6 @@ struct AllDocsView: View {
                              .padding(.vertical, 8)
                 
                 historyStack
-                    .searchable(text: $searchText,
-                                placement: .navigationBarDrawer(displayMode: .always),
-                                prompt: R.string.localizable.search())
             }
         }
     }
@@ -39,18 +36,29 @@ struct AllDocsView: View {
                 ScrollView {
                     VStack(spacing: 12) {
                         ForEach(filteredDocuments(), id: \.id) { doc in
-                            HStack {
-                                SignedViewCell(name: doc.name,
-                                               image: doc.preview,
-                                               isSigned: doc.isSigned,
-                                               date: doc.date,
-                                               id: doc.id,
-                                               path: doc.url,
-                                               viewModel: viewModel)
-                                .onTapGesture {
+                            SignedViewCell(
+                                name: doc.name,
+                                image: doc.preview,
+                                isSigned: doc.isSigned,
+                                date: doc.date,
+                                onRename: {
+                                    viewModel.selectedDocumentID = doc.id
+                                    viewModel.shouldRenameSheet = true
+                                },
+                                onShare: {
+                                    viewModel.shareDocument(at: doc.url)
+                                },
+                                onPrint: {
+                                    viewModel.printDocument(at: doc.url)
+                                },
+                                onDelete: {
+                                    viewModel.deleteDocument(doc)
+                                },
+                                onTap: {
+                                    viewModel.selectedDocumentID = doc.id
                                     viewModel.showFile(doc.url ?? "", fileName: doc.name)
                                 }
-                            }
+                            )
                         }
                     }
                     .padding(.bottom, 40)
