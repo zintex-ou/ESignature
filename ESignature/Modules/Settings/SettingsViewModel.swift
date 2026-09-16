@@ -106,6 +106,25 @@ final class SettingsViewModel: NSObject, ObservableObject {
     }
     
     func restorePurchases(completion: @escaping () -> Void) async {
+        do {
+            try await PurchaseManager.shared.restorePurchases()
+            await MainActor.run {
+                if PurchaseManager.shared.isPremium {
+                    completion()
+                } else {
+                    showAlert(
+                        title: R.string.localizable.noActiveSubscription(),
+                        message: R.string.localizable.youHaveNoActiveSubscriptionsPleaseCheckYourSubscriptionStatus()
+                    )
+                }
+            }
+        } catch {
+            if let adaptyError = AdaptyErrorManager(error: error).error {
+                await MainActor.run {
+                    showAlert(title: adaptyError.title, message: adaptyError.subTitle)
+                }
+            }
+        }
     }
     
     private func showAlert(title: String, message: String) {
