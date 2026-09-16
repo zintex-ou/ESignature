@@ -37,6 +37,9 @@ final class SettingsViewModel: NSObject, ObservableObject {
         case .share:
             showShareApp()
             
+        case .restore:
+            Task { await restorePurchases(completion: {}) }
+            
         case .contact:
             openContactUs()
             
@@ -111,6 +114,10 @@ final class SettingsViewModel: NSObject, ObservableObject {
             await MainActor.run {
                 if PurchaseManager.shared.isPremium {
                     completion()
+                    showAlert(
+                        title: R.string.localizable.success(),
+                        message: R.string.localizable.yourPurchasesHaveBeenRestored()
+                    )
                 } else {
                     showAlert(
                         title: R.string.localizable.noActiveSubscription(),

@@ -4,6 +4,7 @@ enum SettingsEnum: CaseIterable {
     case auth
     case rate
     case share
+    case restore
     case contact
     case privacy
     case terms
@@ -18,6 +19,9 @@ enum SettingsEnum: CaseIterable {
 
         case .share:
             R.string.localizable.shareApp()
+            
+        case .restore:
+            R.string.localizable.restore()
             
         case .contact:
             R.string.localizable.contactUs()

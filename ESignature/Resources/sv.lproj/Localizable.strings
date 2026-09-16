@@ -165,3 +165,6 @@
 "reset_password_warning" = "För att skydda dina personliga uppgifter kommer återställning av lösenordet att ta bort alla sparade dokument och signaturer.";
 "delete_document_warning" = "Är du säker på att du vill ta bort detta dokument?";
 "bannerText" = "3 dagars gratis test";
+
+"success" = "Lyckades";
+"yourPurchasesHaveBeenRestored" = "Dina köp har återställts.";

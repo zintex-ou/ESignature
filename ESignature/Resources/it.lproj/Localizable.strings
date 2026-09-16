@@ -165,3 +165,6 @@
 "reset_password_warning" = "Per proteggere i tuoi dati personali, la reimpostazione della password eliminerà tutti i documenti e le firme salvati.";
 "delete_document_warning" = "Sei sicuro di voler eliminare questo documento?";
 "bannerText" = "3 giorni di prova gratuita";
+
+"success" = "Successo";
+"yourPurchasesHaveBeenRestored" = "I tuoi acquisti sono stati ripristinati.";

@@ -165,3 +165,6 @@
 "reset_password_warning" = "Um Ihre persönlichen Daten zu schützen, werden alle gespeicherten Dokumente und Signaturen beim Zurücksetzen des Passworts gelöscht.";
 "delete_document_warning" = "Sind Sie sicher, dass Sie dieses Dokument löschen möchten?";
 "bannerText" = "3 Tage kostenlose Testversion";
+
+"success" = "Erfolg";
+"yourPurchasesHaveBeenRestored" = "Ihre Käufe wurden wiederhergestellt.";

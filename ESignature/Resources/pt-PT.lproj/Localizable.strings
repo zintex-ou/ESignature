@@ -165,3 +165,6 @@
 "reset_password_warning" = "Para proteger seus dados pessoais, a redefinição da senha excluirá todos os documentos e assinaturas salvos.";
 "delete_document_warning" = "Tem certeza de que deseja excluir este documento?";
 "bannerText" = "3 dias de teste gratuito";
+
+"success" = "Sucesso";
+"yourPurchasesHaveBeenRestored" = "As suas compras foram restauradas.";

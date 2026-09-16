@@ -165,3 +165,6 @@
 "reset_password_warning" = "Pour protéger vos données personnelles, la réinitialisation de votre mot de passe supprimera tous les documents et signatures enregistrés.";
 "delete_document_warning" = "Êtes-vous sûr de vouloir supprimer ce document ?";
 "bannerText" = "3 jours d'essai gratuit";
+
+"success" = "Succès";
+"yourPurchasesHaveBeenRestored" = "Vos achats ont été restaurés.";
