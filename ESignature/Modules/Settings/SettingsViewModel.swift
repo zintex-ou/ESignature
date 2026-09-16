@@ -70,9 +70,8 @@ final class SettingsViewModel: NSObject, ObservableObject {
     }
     
     func requestReview() {
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            SKStoreReviewController.requestReview(in: scene)
-        }
+        guard let url = URL(string: "\(AppConstants.URLs.appStoreLink)?action=write-review") else { return }
+        openURL(url)
     }
     
     func openContactUs() {
