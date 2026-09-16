@@ -4,15 +4,25 @@ import Foundation
 
 class CoreDataManager {
     static let shared = CoreDataManager()
-    private let persistentContainer: NSPersistentContainer
-    
+    private let persistentContainer: NSPersistentCloudKitContainer
+
     private init() {
-        persistentContainer = NSPersistentContainer(name: "SignCoreData")
+        persistentContainer = NSPersistentCloudKitContainer(name: "SignCoreData")
+        guard let description = persistentContainer.persistentStoreDescriptions.first else {
+            fatalError("Failed to retrieve a persistent store description.")
+        }
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
+            containerIdentifier: "iCloud.pdfsignature.electronic.doc.com"
+        )
         persistentContainer.loadPersistentStores { _, error in
             if let error = error {
                 fatalError("Failed to load Core Data stack: \(error)")
             }
         }
+        persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+        persistentContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
     
     var context: NSManagedObjectContext {
@@ -55,11 +65,12 @@ class CoreDataManager {
     }
     
     private func clearEntity(entityName: String) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: entityName)
         do {
-            try context.execute(deleteRequest)
+            let objects = try context.fetch(fetchRequest)
+            for object in objects {
+                context.delete(object)
+            }
             saveContext()
         } catch {
             print("Failed to clear entity \(entityName): \(error.localizedDescription)")
